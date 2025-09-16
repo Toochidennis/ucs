@@ -1,0 +1,7 @@
+{
+  "name": "ucs",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
