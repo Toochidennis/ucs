@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucs/features/admin/views/admin_home_view.dart';
 import 'package:ucs/features/admin/views/officers_view.dart';
-import 'package:ucs/features/admin/views/reports_view.dart';
+import 'package:ucs/features/admin/views/workflow_view.dart';
 import 'package:ucs/features/admin/views/students_view.dart';
 import '../controllers/admin_controller.dart';
 
@@ -28,7 +28,8 @@ class AdminDashboardView extends GetView<AdminController> {
             AdminHomeView(),
             StudentsView(),
             OfficersView(),
-            ReportsView(),
+            WorkflowView(),
+            Center(child: Text("Settings Page - To be implemented")),
           ],
         ),
       ),
@@ -50,8 +51,12 @@ class AdminDashboardView extends GetView<AdminController> {
               label: "Officers",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart),
-              label: "Reports",
+              icon: Icon(Icons.work),
+              label: "Workflow",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: "Settings",
             ),
           ],
         ),
