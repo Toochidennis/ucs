@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:ucs/features/admin/views/admin_dashboard_view.dart';
+import 'package:ucs/features/admin/bindings/admin_binding.dart';
 import 'package:ucs/features/auth/bindings/auth_binding.dart';
 import 'package:ucs/features/auth/views/login_view.dart';
 import 'package:ucs/features/auth/views/splash_view.dart';
@@ -23,7 +25,12 @@ class AppPages {
       page: () => const StudentDashboardView(),
       binding: StudentBinding(),
     ),
+    GetPage(
+      name: AppRoutes.adminDashboard,
+      page: () => const AdminDashboardView(),
+      binding: AdminBinding(),
+    ),
+
     // GetPage(name: AppRoutes.officerDashboard, page: () => const OfficerDashboardView(), binding: OfficerBinding()),
-    // GetPage(name: AppRoutes.adminDashboard, page: () => const AdminDashboardView(), binding: AdminBinding()),
   ];
 }

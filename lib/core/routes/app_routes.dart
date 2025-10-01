@@ -3,5 +3,6 @@ abstract class AppRoutes {
   static const login  = '/login';
   static const studentDashboard = '/student';
   static const officerDashboard = '/officer';
-  static const adminDashboard   = '/admin';
+  static const adminDashboard   = '/admin/dashboard';
+  static const officerView = '/admin/officer-view';
 }

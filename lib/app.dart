@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/routes/app_pages.dart';
 import 'package:ucs/core/routes/app_routes.dart';
-import 'package:ucs/core/theme/app_theme.dart';
+import 'package:ucs/core/constants/app_theme.dart';
 import 'package:ucs/global/app_binding.dart';
 
 class AppRoot extends StatelessWidget {
@@ -17,6 +17,8 @@ class AppRoot extends StatelessWidget {
       initialRoute: AppRoutes.splash,
       getPages: AppPages.pages,
       theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.system,
     );
   }
 }

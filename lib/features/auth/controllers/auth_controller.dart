@@ -26,7 +26,7 @@ class AuthController extends GetxController {
   // For now we’ll route by a stored user role claim/column later.
   void _routeByRole() {
     if (session.value == null) {
-      Get.offAllNamed(AppRoutes.studentDashboard);
+      Get.offAllNamed(AppRoutes.adminDashboard);
       return;
     }
     // TODO: read role from profile (students/officers/admin)
