@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/core/constants/app_font.dart';
-import '../controllers/student_controller.dart';
+import 'package:ucs/features/admin/controllers/add_student_controller.dart';
 
-class AddStudentView extends GetView<StudentController> {
+class AddStudentView extends GetView<AddStudentController> {
   const AddStudentView({super.key});
 
   @override
@@ -30,29 +30,47 @@ class AddStudentView extends GetView<StudentController> {
             key: controller.formKey,
             child: Column(
               children: [
-                // 📌 Personal Info
                 _buildSection("Personal Information", [
-                  _inputField("First Name *", controller.firstName, required: true),
+                  _inputField(
+                    "First Name *",
+                    controller.firstName,
+                    required: true,
+                  ),
                   _inputField("Middle Name", controller.middleName),
-                  _inputField("Last Name *", controller.lastName, required: true),
-                  _inputField("Email Address *", controller.email,
-                      required: true, type: TextInputType.emailAddress),
-                  _inputField("Phone Number *", controller.phone,
-                      required: true, type: TextInputType.phone),
+                  _inputField(
+                    "Last Name *",
+                    controller.lastName,
+                    required: true,
+                  ),
+                  _inputField(
+                    "Email Address *",
+                    controller.email,
+                    required: true,
+                    type: TextInputType.emailAddress,
+                  ),
+                  _inputField(
+                    "Phone Number *",
+                    controller.phone,
+                    required: true,
+                    type: TextInputType.phone,
+                  ),
                   _dateField("Date of Birth", controller.dob),
                   _genderSelector(),
                 ]),
 
                 const SizedBox(height: 20),
 
-                // 📌 Academic Info
                 _buildSection("Academic Information", [
-                  _inputField("Student ID *", controller.studentId, required: true),
+                  _inputField(
+                    "Student ID *",
+                    controller.studentId,
+                    required: true,
+                  ),
                   _dropdownField("Program/Course *", controller.program, [
                     "Bachelor's Degree",
                     "Master's Degree",
                     "PhD",
-                    "Certificate Program"
+                    "Certificate Program",
                   ]),
                   _inputField("Major/Field of Study", controller.major),
                   Row(
@@ -78,10 +96,12 @@ class AddStudentView extends GetView<StudentController> {
 
                 const SizedBox(height: 20),
 
-                // 📌 Faculty & Dept
                 _buildSection("Faculty and Department Assignment", [
-                  _dropdownField("Faculty *", controller.faculty,
-                      controller.faculties.keys.toList()),
+                  _dropdownField(
+                    "Faculty *",
+                    controller.faculty,
+                    controller.faculties.keys.toList(),
+                  ),
                   _dropdownField(
                     "Department *",
                     controller.department,
@@ -92,7 +112,6 @@ class AddStudentView extends GetView<StudentController> {
 
                 const SizedBox(height: 20),
 
-                // 📌 Contact Info
                 _buildSection("Contact Information", [
                   _inputField("Street Address", controller.street),
                   Row(
@@ -104,36 +123,56 @@ class AddStudentView extends GetView<StudentController> {
                   ),
                   Row(
                     children: [
-                      Expanded(child: _inputField("Postal Code", controller.postal)),
+                      Expanded(
+                        child: _inputField("Postal Code", controller.postal),
+                      ),
                       const SizedBox(width: 10),
-                      Expanded(child: _inputField("Country", controller.country)),
+                      Expanded(
+                        child: _inputField("Country", controller.country),
+                      ),
                     ],
                   ),
-                  _inputField("Emergency Contact Name", controller.emergencyName),
+                  _inputField(
+                    "Emergency Contact Name",
+                    controller.emergencyName,
+                  ),
                   Row(
                     children: [
-                      Expanded(child: _inputField("Relationship", controller.relationship)),
+                      Expanded(
+                        child: _inputField(
+                          "Relationship",
+                          controller.relationship,
+                        ),
+                      ),
                       const SizedBox(width: 10),
-                      Expanded(child: _inputField("Phone", controller.emergencyPhone)),
+                      Expanded(
+                        child: _inputField("Phone", controller.emergencyPhone),
+                      ),
                     ],
                   ),
                 ]),
 
                 const SizedBox(height: 20),
 
-                // 📌 Account Settings
                 _buildSection("Account Settings", [
                   _passwordField("Initial Password *", controller.password),
-                  _dropdownField(
-                      "Account Status", controller.accountStatus, ["Active", "Inactive"]),
+                  _dropdownField("Account Status", controller.accountStatus, [
+                    "Active",
+                    "Inactive",
+                  ]),
                   SwitchListTile(
                     value: controller.portalAccess.value,
                     onChanged: (v) => controller.portalAccess.value = v,
                     activeColor: const Color(AppColor.primary),
-                    title: Text("Enable Student Portal Access",
-                        style: AppFont.bodySmall),
+                    title: Text(
+                      "Enable Student Portal Access",
+                      style: AppFont.bodySmall,
+                    ),
                   ),
-                  _dateField("Account Activation Date", controller.activationDate),
+                  _dateField(
+                    "Account Activation Date",
+                    controller.activationDate,
+                  ),
                 ]),
 
                 const SizedBox(height: 24),
@@ -166,8 +205,6 @@ class AddStudentView extends GetView<StudentController> {
     );
   }
 
-  // ========== UI Helpers ==========
-
   Widget _buildSection(String title, List<Widget> children) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -198,7 +235,8 @@ class AddStudentView extends GetView<StudentController> {
         controller: controller,
         keyboardType: type,
         validator: required
-            ? (v) => (v == null || v.trim().isEmpty) ? "$label is required" : null
+            ? (v) =>
+                  (v == null || v.trim().isEmpty) ? "$label is required" : null
             : null,
         decoration: InputDecoration(
           labelText: label,
@@ -259,7 +297,7 @@ class AddStudentView extends GetView<StudentController> {
       child: Obx(
         () => TextFormField(
           controller: controller,
-          obscureText: !Get.find<StudentController>().showPassword.value,
+          obscureText: !Get.find<AddStudentController>().showPassword.value,
           validator: (v) =>
               (v == null || v.isEmpty) ? "Password is required" : null,
           decoration: InputDecoration(
@@ -267,13 +305,13 @@ class AddStudentView extends GetView<StudentController> {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             suffixIcon: IconButton(
               icon: Icon(
-                Get.find<StudentController>().showPassword.value
+                Get.find<AddStudentController>().showPassword.value
                     ? Icons.visibility_off
                     : Icons.visibility,
               ),
               onPressed: () {
-                Get.find<StudentController>().showPassword.value =
-                    !Get.find<StudentController>().showPassword.value;
+                Get.find<AddStudentController>().showPassword.value =
+                    !Get.find<AddStudentController>().showPassword.value;
               },
             ),
           ),
@@ -287,13 +325,15 @@ class AddStudentView extends GetView<StudentController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Gender", style: AppFont.bodySmall),
-        Obx(() => Row(
-              children: [
-                _radioOption("Male", "male"),
-                _radioOption("Female", "female"),
-                _radioOption("Other", "other"),
-              ],
-            )),
+        Obx(
+          () => Row(
+            children: [
+              _radioOption("Male", "male"),
+              _radioOption("Female", "female"),
+              _radioOption("Other", "other"),
+            ],
+          ),
+        ),
       ],
     );
   }

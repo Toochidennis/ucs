@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ucs/core/routes/app_routes.dart';
 import '../controllers/admin_controller.dart';
 import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/core/constants/app_color.dart';
@@ -15,9 +16,7 @@ class OfficersView extends GetView<AdminController> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {
-              // TODO: open add officer form
-            },
+            onPressed: () => Get.toNamed(AppRoutes.addOfficer),
           ),
         ],
       ),

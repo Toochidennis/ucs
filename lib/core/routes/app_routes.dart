@@ -5,4 +5,6 @@ abstract class AppRoutes {
   static const officerDashboard = '/officer';
   static const adminDashboard   = '/admin/dashboard';
   static const officerView = '/admin/officer-view';
+  static const addOfficer  = '/admin/officer/add';
+  static const addStudent  = '/admin/student/add';
 }

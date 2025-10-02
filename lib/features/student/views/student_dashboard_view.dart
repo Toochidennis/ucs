@@ -1,26 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ucs/features/student/controllers/student_controller.dart';
+import 'package:ucs/features/student/views/clearance_detail_view.dart';
+import 'package:ucs/features/student/views/student_profile_view.dart';
+import 'package:ucs/shared/views/notifications_view.dart';
 
-class StudentDashboardView extends StatelessWidget {
+class StudentDashboardView extends GetView<StudentController> {
   const StudentDashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Next step we’ll replace with a proper stepper/timeline and summary cards.
     return Scaffold(
-      appBar: AppBar(title: const Text('Student Dashboard')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: const [
-          Text('Clearance Progress', style: TextStyle(fontWeight: FontWeight.w600)),
-          SizedBox(height: 12),
-          // Placeholder tiles
-          ListTile(leading: Icon(Icons.receipt_long), title: Text('Faculty Finance Office'), subtitle: Text('Pending')),
-          ListTile(leading: Icon(Icons.local_library), title: Text('Library'), subtitle: Text('Pending')),
-          ListTile(leading: Icon(Icons.badge), title: Text('Alumni Office'), subtitle: Text('Pending')),
+      appBar: AppBar(
+        title: const Text("Student Dashboard"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () => Get.toNamed('/admin/settings'),
+          ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {}, label: const Text('Continue Clearance'), icon: const Icon(Icons.play_arrow),
+      body: Obx(
+        () => IndexedStack(
+          index: controller.currentTab.value,
+          children: const [
+            StudentDashboardView(),
+            ClearanceDetailView(),
+            NotificationsView(),
+            StudentProfileView(),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Obx(
+        () => BottomNavigationBar(
+          currentIndex: controller.currentTab.value,
+          onTap: controller.changeTab,
+          type: BottomNavigationBarType.fixed,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard),
+              activeIcon: Icon(Icons.home),
+              label: "Dashboard",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.article_outlined),
+              activeIcon: Icon(Icons.article),
+              label: "Clearance",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications_outlined),
+              activeIcon: Icon(Icons.notifications),
+              label: "Notifications",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: "Profile",
+            ),
+          ],
+        ),
       ),
     );
   }

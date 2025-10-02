@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucs/features/admin/views/admin_home_view.dart';
+import 'package:ucs/features/admin/views/admin_settings_view.dart';
+import 'package:ucs/features/admin/views/home_view.dart';
 import 'package:ucs/features/admin/views/officers_view.dart';
 import 'package:ucs/features/admin/views/workflow_view.dart';
 import 'package:ucs/features/admin/views/students_view.dart';
@@ -16,7 +17,7 @@ class AdminDashboardView extends GetView<AdminController> {
         title: const Text("Admin Dashboard"),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.notifications),
             onPressed: () => Get.toNamed('/admin/settings'),
           ),
         ],
@@ -25,11 +26,11 @@ class AdminDashboardView extends GetView<AdminController> {
         () => IndexedStack(
           index: controller.currentTab.value,
           children: const [
-            AdminHomeView(),
+            HomeView(),
             StudentsView(),
             OfficersView(),
             WorkflowView(),
-            Center(child: Text("Settings Page - To be implemented")),
+            AdminSettingsView(),
           ],
         ),
       ),
@@ -38,10 +39,7 @@ class AdminDashboardView extends GetView<AdminController> {
           currentIndex: controller.currentTab.value,
           onTap: controller.changeTab,
           items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard),
-              label: "Home",
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Home"),
             BottomNavigationBarItem(
               icon: Icon(Icons.school),
               label: "Students",
@@ -50,10 +48,7 @@ class AdminDashboardView extends GetView<AdminController> {
               icon: Icon(Icons.people),
               label: "Officers",
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.work),
-              label: "Workflow",
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.work), label: "Workflow"),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),
               label: "Settings",

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/admin_controller.dart';
 import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/core/constants/app_color.dart';
+import 'package:ucs/core/routes/app_routes.dart';
+import 'package:ucs/features/admin/controllers/admin_controller.dart';
 
 class StudentsView extends GetView<AdminController> {
   const StudentsView({super.key});
@@ -15,15 +16,12 @@ class StudentsView extends GetView<AdminController> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {
-              // TODO: open add student form
-            },
+            onPressed: () => Get.toNamed(AppRoutes.addStudent),
           ),
         ],
       ),
       body: Column(
         children: [
-          // 🔍 Search Bar
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextField(
@@ -40,16 +38,12 @@ class StudentsView extends GetView<AdminController> {
             ),
           ),
 
-          // 📋 Students List
           Expanded(
             child: Obx(() {
               final students = controller.students; // RxList in controller
               if (students.isEmpty) {
                 return Center(
-                  child: Text(
-                    "No students found",
-                    style: AppFont.bodyMedium,
-                  ),
+                  child: Text("No students found", style: AppFont.bodyMedium),
                 );
               }
 
@@ -59,8 +53,11 @@ class StudentsView extends GetView<AdminController> {
                 separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final student = students[index];
-                  return _buildStudentCard(student['name']!, student['matricNo']!,
-                      student['department']!);
+                  return _buildStudentCard(
+                    student['name']!,
+                    student['matricNo']!,
+                    student['department']!,
+                  );
                 },
               );
             }),

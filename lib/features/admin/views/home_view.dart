@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/core/constants/app_font.dart';
 import '../controllers/admin_controller.dart';
 
-class AdminHomeView extends GetView<AdminController> {
-  const AdminHomeView({super.key});
+class HomeView extends GetView<AdminController> {
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,6 @@ class AdminHomeView extends GetView<AdminController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 📊 Overview Cards
           GridView.count(
             shrinkWrap: true,
             crossAxisCount: isWide ? 4 : 2,
@@ -24,18 +22,47 @@ class AdminHomeView extends GetView<AdminController> {
             mainAxisSpacing: 16,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              _buildOverviewCard("Total Students", "1,247", "+12%", Icons.person, Colors.blue, Colors.green),
-              _buildOverviewCard("Completed", "892", "+8%", Icons.check_circle, Colors.green, Colors.green),
-              _buildOverviewCard("Pending", "245", "-3%", Icons.access_time, Colors.amber, Colors.orange),
-              _buildOverviewCard("Officers", "34", "+2%", Icons.group, Colors.purple, Colors.blue),
+              _buildOverviewCard(
+                "Total Students",
+                "1,247",
+                "+12%",
+                Icons.person,
+                Colors.blue,
+                Colors.green,
+              ),
+              _buildOverviewCard(
+                "Completed",
+                "892",
+                "+8%",
+                Icons.check_circle,
+                Colors.green,
+                Colors.green,
+              ),
+              _buildOverviewCard(
+                "Pending",
+                "245",
+                "-3%",
+                Icons.access_time,
+                Colors.amber,
+                Colors.orange,
+              ),
+              _buildOverviewCard(
+                "Officers",
+                "34",
+                "+2%",
+                Icons.group,
+                Colors.purple,
+                Colors.blue,
+              ),
             ],
           ),
 
           const SizedBox(height: 20),
 
-          // 📈 Clearance Progress
           Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             elevation: 2,
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -60,7 +87,7 @@ class AdminHomeView extends GetView<AdminController> {
                       _buildProgressStat("18%", "In Progress", Colors.amber),
                       _buildProgressStat("10%", "Delayed", Colors.red),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -68,9 +95,10 @@ class AdminHomeView extends GetView<AdminController> {
 
           const SizedBox(height: 20),
 
-          // ⚡ Quick Actions
           Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             elevation: 2,
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -86,10 +114,30 @@ class AdminHomeView extends GetView<AdminController> {
                     mainAxisSpacing: 12,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      _buildQuickAction(Icons.person, "Students", Colors.blue[50]!, Colors.blue),
-                      _buildQuickAction(Icons.person, "Officers", Colors.green[50]!, Colors.green),
-                      _buildQuickAction(Icons.schema, "Workflow", Colors.purple[50]!, Colors.purple),
-                      _buildQuickAction(Icons.bar_chart, "Reports", Colors.orange[50]!, Colors.orange),
+                      _buildQuickAction(
+                        Icons.person,
+                        "Students",
+                        Colors.blue[50]!,
+                        Colors.blue,
+                      ),
+                      _buildQuickAction(
+                        Icons.person,
+                        "Officers",
+                        Colors.green[50]!,
+                        Colors.green,
+                      ),
+                      _buildQuickAction(
+                        Icons.schema,
+                        "Workflow",
+                        Colors.purple[50]!,
+                        Colors.purple,
+                      ),
+                      _buildQuickAction(
+                        Icons.bar_chart,
+                        "Reports",
+                        Colors.orange[50]!,
+                        Colors.orange,
+                      ),
                     ],
                   ),
                 ],
@@ -99,9 +147,10 @@ class AdminHomeView extends GetView<AdminController> {
 
           const SizedBox(height: 20),
 
-          // 📰 Recent Activity
           Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             elevation: 2,
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -110,9 +159,24 @@ class AdminHomeView extends GetView<AdminController> {
                 children: [
                   Text("Recent Activity", style: AppFont.titleMedium),
                   const SizedBox(height: 12),
-                  _buildActivity(Icons.check, "Finance clearance approved for John Doe", "by Dr. Smith • 5 minutes ago", Colors.green),
-                  _buildActivity(Icons.person_add, "New student registered: Emily Chen", "Matric: CS/2025/042 • 15 minutes ago", Colors.blue),
-                  _buildActivity(Icons.warning, "Library system maintenance scheduled", "Tomorrow 2:00 AM - 4:00 AM", Colors.amber),
+                  _buildActivity(
+                    Icons.check,
+                    "Finance clearance approved for John Doe",
+                    "by Dr. Smith • 5 minutes ago",
+                    Colors.green,
+                  ),
+                  _buildActivity(
+                    Icons.person_add,
+                    "New student registered: Emily Chen",
+                    "Matric: CS/2025/042 • 15 minutes ago",
+                    Colors.blue,
+                  ),
+                  _buildActivity(
+                    Icons.warning,
+                    "Library system maintenance scheduled",
+                    "Tomorrow 2:00 AM - 4:00 AM",
+                    Colors.amber,
+                  ),
                 ],
               ),
             ),
@@ -123,7 +187,14 @@ class AdminHomeView extends GetView<AdminController> {
   }
 
   // Reusable Overview Card
-  Widget _buildOverviewCard(String title, String value, String trend, IconData icon, Color bgColor, Color trendColor) {
+  Widget _buildOverviewCard(
+    String title,
+    String value,
+    String trend,
+    IconData icon,
+    Color bgColor,
+    Color trendColor,
+  ) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 2,
@@ -139,7 +210,10 @@ class AdminHomeView extends GetView<AdminController> {
                   backgroundColor: bgColor.withOpacity(0.2),
                   child: Icon(icon, color: bgColor),
                 ),
-                Text(trend, style: AppFont.bodySmall.copyWith(color: trendColor)),
+                Text(
+                  trend,
+                  style: AppFont.bodySmall.copyWith(color: trendColor),
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -163,7 +237,12 @@ class AdminHomeView extends GetView<AdminController> {
   }
 
   // Quick Action Button
-  Widget _buildQuickAction(IconData icon, String label, Color bgColor, Color iconColor) {
+  Widget _buildQuickAction(
+    IconData icon,
+    String label,
+    Color bgColor,
+    Color iconColor,
+  ) {
     return InkWell(
       onTap: () {
         // TODO: navigate to screen
@@ -187,7 +266,12 @@ class AdminHomeView extends GetView<AdminController> {
   }
 
   // Recent Activity Item
-  Widget _buildActivity(IconData icon, String title, String subtitle, Color color) {
+  Widget _buildActivity(
+    IconData icon,
+    String title,
+    String subtitle,
+    Color color,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -207,7 +291,7 @@ class AdminHomeView extends GetView<AdminController> {
                 Text(subtitle, style: AppFont.caption),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
