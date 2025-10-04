@@ -4,8 +4,8 @@ import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/core/constants/app_color.dart';
 import '../controllers/student_controller.dart';
 
-class StudentDashboardView extends GetView<StudentController> {
-  const StudentDashboardView({super.key});
+class StudentHomeView extends GetView<StudentController> {
+  const StudentHomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,58 +17,6 @@ class StudentDashboardView extends GetView<StudentController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
-                border: Border(
-                  bottom: BorderSide(color: theme.dividerColor),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.grey.shade200,
-                    child: const Icon(Icons.person_outline,
-                        color: Colors.grey, size: 22),
-                  ),
-                  Text("Dashboard", style: AppFont.titleSmall),
-                  Stack(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.grey.shade200,
-                        child: const Icon(Icons.notifications_none,
-                            color: Colors.grey, size: 22),
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(3),
-                          decoration: const BoxDecoration(
-                            color: Color(AppColor.error),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Text(
-                            "3",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
             // Welcome Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -77,8 +25,80 @@ class StudentDashboardView extends GetView<StudentController> {
                 children: [
                   Text("Welcome, Sarah Johnson", style: AppFont.titleLarge),
                   const SizedBox(height: 4),
-                  Text("Complete your clearance process",
-                      style: AppFont.bodyMedium),
+                  Text(
+                    "Complete your clearance process",
+                    style: AppFont.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // Summary Cards
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Card(
+                      color: Colors.green.shade50,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "3",
+                              style: AppFont.titleMedium.copyWith(
+                                color: Colors.green,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "Units Cleared",
+                              style: AppFont.bodySmall.copyWith(
+                                color: Colors.green.shade700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Card(
+                      color: Colors.yellow.shade50,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "6",
+                              style: AppFont.titleMedium.copyWith(
+                                color: Colors.orange,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "Pending Units",
+                              style: AppFont.bodySmall.copyWith(
+                                color: Colors.orange.shade700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -90,7 +110,8 @@ class StudentDashboardView extends GetView<StudentController> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -144,70 +165,13 @@ class StudentDashboardView extends GetView<StudentController> {
 
             const SizedBox(height: 20),
 
-            // Summary Cards
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Card(
-                      color: Colors.green.shade50,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("3",
-                                style: AppFont.titleMedium
-                                    .copyWith(color: Colors.green)),
-                            const SizedBox(height: 4),
-                            Text("Units Cleared",
-                                style: AppFont.bodySmall
-                                    .copyWith(color: Colors.green.shade700)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Card(
-                      color: Colors.yellow.shade50,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("6",
-                                style: AppFont.titleMedium
-                                    .copyWith(color: Colors.orange)),
-                            const SizedBox(height: 4),
-                            Text("Pending Units",
-                                style: AppFont.bodySmall
-                                    .copyWith(color: Colors.orange.shade700)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
             // Recent Activity
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -215,12 +179,21 @@ class StudentDashboardView extends GetView<StudentController> {
                     children: [
                       Text("Recent Activity", style: AppFont.titleSmall),
                       const SizedBox(height: 16),
-                      _activityItem("Finance clearance approved", "2 hours ago",
-                          Colors.green),
-                      _activityItem("Library documents submitted", "1 day ago",
-                          Colors.blue),
                       _activityItem(
-                          "Hostel clearance pending", "3 days ago", Colors.orange),
+                        "Finance clearance approved",
+                        "2 hours ago",
+                        Colors.green,
+                      ),
+                      _activityItem(
+                        "Library documents submitted",
+                        "1 day ago",
+                        Colors.blue,
+                      ),
+                      _activityItem(
+                        "Hostel clearance pending",
+                        "3 days ago",
+                        Colors.orange,
+                      ),
                     ],
                   ),
                 ),
@@ -273,8 +246,7 @@ class StudentDashboardView extends GetView<StudentController> {
             width: 8,
             height: 8,
             margin: const EdgeInsets.only(top: 6, right: 12),
-            decoration:
-                BoxDecoration(color: dotColor, shape: BoxShape.circle),
+            decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
           ),
           Expanded(
             child: Column(
@@ -285,7 +257,7 @@ class StudentDashboardView extends GetView<StudentController> {
                 Text(time, style: AppFont.caption),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
