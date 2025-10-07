@@ -70,7 +70,7 @@ class AddOfficerView extends GetView<OfficerController> {
               _buildSection("Role & Department", [
                 Obx(
                   () => DropdownButtonFormField<String>(
-                    value: controller.department.value.isEmpty
+                    initialValue: controller.department.value.isEmpty
                         ? null
                         : controller.department.value,
                     items: [
@@ -241,7 +241,7 @@ class AddOfficerView extends GetView<OfficerController> {
         onChanged: (v) => value.value = v,
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
         subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
-        activeColor: Colors.blue,
+        activeThumbColor: Colors.blue,
       ),
     );
   }

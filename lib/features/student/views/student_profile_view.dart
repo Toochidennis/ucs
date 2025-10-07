@@ -213,7 +213,7 @@ class StudentProfileView extends GetView<StudentProfileController> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color(AppColor.primary),
+            activeThumbColor: const Color(AppColor.primary),
           )
         ],
       ),

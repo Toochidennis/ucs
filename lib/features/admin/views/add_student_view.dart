@@ -163,7 +163,7 @@ class AddStudentView extends GetView<AddStudentController> {
                   SwitchListTile(
                     value: controller.portalAccess.value,
                     onChanged: (v) => controller.portalAccess.value = v,
-                    activeColor: const Color(AppColor.primary),
+                    activeThumbColor: const Color(AppColor.primary),
                     title: Text(
                       "Enable Student Portal Access",
                       style: AppFont.bodySmall,
@@ -251,7 +251,7 @@ class AddStudentView extends GetView<AddStudentController> {
       padding: const EdgeInsets.only(bottom: 12),
       child: Obx(
         () => DropdownButtonFormField<String>(
-          value: selected.value.isEmpty ? null : selected.value,
+          initialValue: selected.value.isEmpty ? null : selected.value,
           items: options
               .map((e) => DropdownMenuItem(value: e, child: Text(e)))
               .toList(),

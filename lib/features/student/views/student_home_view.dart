@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/constants/app_font.dart';
-import 'package:ucs/core/constants/app_color.dart';
 import '../controllers/student_controller.dart';
 
 class StudentHomeView extends GetView<StudentController> {

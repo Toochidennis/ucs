@@ -167,7 +167,7 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: DropdownButtonFormField<String>(
-        value: selected.value,
+        initialValue: selected.value,
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -184,7 +184,7 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
       onChanged: onChanged,
       title: Text(title, style: AppFont.bodyMedium),
       subtitle: Text(subtitle, style: AppFont.bodySmall),
-      activeColor: const Color(AppColor.primary),
+      activeThumbColor: const Color(AppColor.primary),
     );
   }
 

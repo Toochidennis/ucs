@@ -144,7 +144,7 @@ class WorkflowView extends GetView<WorkflowController> {
               Switch(
                 value: enabled,
                 onChanged: onToggle,
-                activeColor: const Color(AppColor.primary),
+                activeThumbColor: const Color(AppColor.primary),
               ),
             ],
           )
@@ -175,7 +175,7 @@ class WorkflowView extends GetView<WorkflowController> {
           Switch(
             value: enabled,
             onChanged: onToggle,
-            activeColor: const Color(AppColor.primary),
+            activeThumbColor: const Color(AppColor.primary),
           ),
         ],
       ),
