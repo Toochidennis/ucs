@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/features/admin/controllers/add_student_controller.dart';
 
@@ -43,35 +42,30 @@ class AddStudentView extends GetView<AddStudentController> {
                     required: true,
                   ),
                   _inputField(
-                    "Email Address *",
+                    "Email Address ",
                     controller.email,
-                    required: true,
                     type: TextInputType.emailAddress,
                   ),
                   _inputField(
-                    "Phone Number *",
+                    "Phone Number",
                     controller.phone,
-                    required: true,
                     type: TextInputType.phone,
                   ),
                   _dateField("Date of Birth", controller.dob),
-                  _genderSelector(),
+                  _dropdownField("Gender", controller.gender, [
+                    "Male",
+                    "Female",
+                  ]),
                 ]),
 
                 const SizedBox(height: 20),
 
                 _buildSection("Academic Information", [
                   _inputField(
-                    "Student ID *",
+                    "Matric No *",
                     controller.studentId,
                     required: true,
                   ),
-                  _dropdownField("Program/Course *", controller.program, [
-                    "Bachelor's Degree",
-                    "Master's Degree",
-                    "PhD",
-                    "Certificate Program",
-                  ]),
                   _inputField("Major/Field of Study", controller.major),
                   Row(
                     children: [
@@ -112,67 +106,12 @@ class AddStudentView extends GetView<AddStudentController> {
 
                 const SizedBox(height: 20),
 
-                _buildSection("Contact Information", [
-                  _inputField("Street Address", controller.street),
-                  Row(
-                    children: [
-                      Expanded(child: _inputField("City", controller.city)),
-                      const SizedBox(width: 10),
-                      Expanded(child: _inputField("State", controller.state)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _inputField("Postal Code", controller.postal),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _inputField("Country", controller.country),
-                      ),
-                    ],
-                  ),
-                  _inputField(
-                    "Emergency Contact Name",
-                    controller.emergencyName,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _inputField(
-                          "Relationship",
-                          controller.relationship,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _inputField("Phone", controller.emergencyPhone),
-                      ),
-                    ],
-                  ),
-                ]),
-
-                const SizedBox(height: 20),
-
                 _buildSection("Account Settings", [
                   _passwordField("Initial Password *", controller.password),
                   _dropdownField("Account Status", controller.accountStatus, [
                     "Active",
                     "Inactive",
                   ]),
-                  SwitchListTile(
-                    value: controller.portalAccess.value,
-                    onChanged: (v) => controller.portalAccess.value = v,
-                    activeThumbColor: const Color(AppColor.primary),
-                    title: Text(
-                      "Enable Student Portal Access",
-                      style: AppFont.bodySmall,
-                    ),
-                  ),
-                  _dateField(
-                    "Account Activation Date",
-                    controller.activationDate,
-                  ),
                 ]),
 
                 const SizedBox(height: 24),
@@ -317,39 +256,6 @@ class AddStudentView extends GetView<AddStudentController> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _genderSelector() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Gender", style: AppFont.bodySmall),
-        Obx(
-          () => Row(
-            children: [
-              _radioOption("Male", "male"),
-              _radioOption("Female", "female"),
-              _radioOption("Other", "other"),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _radioOption(String label, String value) {
-    return Row(
-      children: [
-        Obx(
-          () => Radio<String>(
-            value: value,
-            groupValue: controller.gender.value,
-            onChanged: (val) => controller.gender.value = val ?? "",
-          ),
-        ),
-        Text(label),
-      ],
     );
   }
 }

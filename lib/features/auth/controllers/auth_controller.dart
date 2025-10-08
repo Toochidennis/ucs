@@ -52,7 +52,7 @@ class AuthController extends GetxController {
         Get.offAllNamed(AppRoutes.adminDashboard);
         break;
       default:
-        Get.offAllNamed(AppRoutes.studentDashboard);
+        Get.offAllNamed(AppRoutes.adminDashboard);
     }
   }
 }

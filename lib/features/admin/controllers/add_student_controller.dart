@@ -12,28 +12,17 @@ class AddStudentController extends GetxController {
   final phone = TextEditingController();
   final dob = TextEditingController();
   final studentId = TextEditingController();
-  final program = "".obs;
   final major = TextEditingController();
   final enrollmentYear = TextEditingController();
   final graduationYear = TextEditingController();
   final faculty = "".obs;
   final department = "".obs;
   final advisor = TextEditingController();
-  final street = TextEditingController();
-  final city = TextEditingController();
-  final state = TextEditingController();
-  final postal = TextEditingController();
-  final country = TextEditingController();
-  final emergencyName = TextEditingController();
-  final relationship = TextEditingController();
-  final emergencyPhone = TextEditingController();
   final password = TextEditingController();
   final accountStatus = "Active".obs;
-  final activationDate = TextEditingController();
+  final gender = "Male".obs;
 
   // Reactive fields
-  final gender = "".obs;
-  final portalAccess = true.obs;
   final showPassword = false.obs;
   final isFormValid = false.obs;
 

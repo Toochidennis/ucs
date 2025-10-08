@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 
 
 class FinanceView extends GetView<FinanceController> {
+  const FinanceView({super.key});
+
   const FacultyFinanceOfficeView({super.key});
 
   @override
