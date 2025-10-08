@@ -15,10 +15,9 @@ class AuthController extends GetxController {
 
   Future<void> fetchCurrentUser() async {
     try {
+      await authService.ping();
       final user = await authService.getCurrentUser();
       currentUser.value = user;
-
-      print("output $authService");
       _routeByRole();
     } catch (_) {
       currentUser.value = null;

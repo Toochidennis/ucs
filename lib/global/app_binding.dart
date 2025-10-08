@@ -8,6 +8,5 @@ class AppBinding extends Bindings {
   void dependencies() {
     Get.put<Env>(Env(), permanent: true);
     AppWriteService.initialize();
-    
   }
 }
