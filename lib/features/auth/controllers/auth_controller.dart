@@ -1,36 +1,59 @@
 import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:appwrite/models.dart';
 import 'package:ucs/core/routes/app_routes.dart';
+import 'package:ucs/data/services/auth_service.dart';
 
 class AuthController extends GetxController {
-  final Rx<Session?> session = Rx<Session?>(Supabase.instance.client.auth.currentSession);
+  final Rx<User?> currentUser = Rx<User?>(null);
+  final authService = AuthService();
 
   @override
   void onInit() {
     super.onInit();
-  
-    Supabase.instance.client.auth.onAuthStateChange.listen((event) {
-      session.value = event.session;
-      _routeByRole();
-    });
+    fetchCurrentUser();
   }
 
-  Future<void> loginWithEmail(String email, String password) async {
-    await Supabase.instance.client.auth.signInWithPassword(email: email, password: password);
+  Future<void> fetchCurrentUser() async {
+    try {
+      final user = await authService.getCurrentUser();
+      currentUser.value = user;
+
+      print("output $authService");
+      _routeByRole();
+    } catch (_) {
+      currentUser.value = null;
+      Get.offAllNamed(AppRoutes.login);
+    }
+  }
+
+  Future<void> login(String email, String password) async {
+    await authService.login(email, password);
+    await fetchCurrentUser();
   }
 
   Future<void> logout() async {
-    await Supabase.instance.client.auth.signOut();
+    await authService.logout();
+    currentUser.value = null;
+    Get.offAllNamed(AppRoutes.login);
   }
 
-  // For now we’ll route by a stored user role claim/column later.
   void _routeByRole() {
-    if (session.value == null) {
-      Get.offAllNamed(AppRoutes.officerDashboard);
+    if (currentUser.value == null) {
+      Get.offAllNamed(AppRoutes.login);
       return;
     }
-    // TODO: read role from profile (students/officers/admin)
-    // Temporarily route student:
-    Get.offAllNamed(AppRoutes.studentDashboard);
+
+    // Example routing logic
+    final role = currentUser.value?.prefs.data['role'];
+    switch (role) {
+      case 'officer':
+        Get.offAllNamed(AppRoutes.officerDashboard);
+        break;
+      case 'admin':
+        Get.offAllNamed(AppRoutes.adminDashboard);
+        break;
+      default:
+        Get.offAllNamed(AppRoutes.studentDashboard);
+    }
   }
 }

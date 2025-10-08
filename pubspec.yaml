@@ -39,7 +39,7 @@ dependencies:
   get_storage: ^2.1.1
   connectivity_plus: ^7.0.0
   package_info_plus: ^9.0.0
-  supabase_flutter: ^2.10.1
+  #supabase_flutter: ^2.10.1
   intl: ^0.20.2
   logger: ^2.6.1
   file_picker: ^10.3.3
@@ -55,6 +55,9 @@ dependencies:
   fl_chart: ^1.1.1
   flutter_spinkit: ^5.2.2
   appwrite: ^20.0.0
+  flutter_local_notifications: ^19.4.2
+  firebase_core: ^4.1.1
+  firebase_messaging: ^16.0.2
 
 dev_dependencies:
   flutter_test:

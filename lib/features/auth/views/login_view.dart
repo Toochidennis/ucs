@@ -67,7 +67,7 @@ class _LoginViewState extends State<LoginView> {
                           setState(() => isBusy = true);
                           try {
                             // For now we assume email login; later we’ll map matric->email or use DB lookup.
-                            await auth.loginWithEmail(
+                            await auth.login(
                               emailOrMatric.text.trim(),
                               password.text.trim(),
                             );
