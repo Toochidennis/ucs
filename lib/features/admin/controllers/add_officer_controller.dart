@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OfficerController extends GetxController {
+class AddOfficerController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
   // Inputs
@@ -10,21 +10,16 @@ class OfficerController extends GetxController {
   final phone = TextEditingController();
   final role = TextEditingController();
   final employeeId = TextEditingController();
+  final password = TextEditingController();
 
   // Dropdowns
   final department = "".obs;
 
   // Toggles
   final canReview = false.obs;
-  final canManageDocs = false.obs;
-  final canSendNotif = false.obs;
-  final canGenerateReports = false.obs;
-
   final officerStatus = true.obs;
-  final emailNotif = true.obs;
 
-  final startTime = TimeOfDay(hour: 8, minute: 0).obs;
-  final endTime = TimeOfDay(hour: 17, minute: 0).obs;
+  final showPassword = false.obs;
 
   // Submit
   void saveOfficer() {

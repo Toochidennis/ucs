@@ -13,14 +13,13 @@ class AddStudentController extends GetxController {
   final dob = TextEditingController();
   final studentId = TextEditingController();
   final major = TextEditingController();
-  final enrollmentYear = TextEditingController();
-  final graduationYear = TextEditingController();
   final faculty = "".obs;
   final department = "".obs;
   final advisor = TextEditingController();
   final password = TextEditingController();
   final accountStatus = "Active".obs;
   final gender = "Male".obs;
+  final studentStatus = true.obs;
 
   // Reactive fields
   final showPassword = false.obs;

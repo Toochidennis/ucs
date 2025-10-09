@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
+import 'package:ucs/features/admin/bindings/add_officer_binding.dart';
+import 'package:ucs/features/admin/bindings/add_student_binding.dart';
 import 'package:ucs/features/admin/views/add_officer_view.dart';
 import 'package:ucs/features/admin/views/add_student_view.dart';
 import 'package:ucs/features/admin/views/admin_dashboard_view.dart';
-import 'package:ucs/features/admin/bindings/admin_binding.dart';
+import 'package:ucs/features/admin/bindings/admin_dashboard_binding.dart';
 import 'package:ucs/features/auth/bindings/auth_binding.dart';
 import 'package:ucs/features/auth/views/login_view.dart';
 import 'package:ucs/features/auth/views/splash_view.dart';
@@ -32,17 +34,17 @@ class AppPages {
     GetPage(
       name: AppRoutes.adminDashboard,
       page: () => const AdminDashboardView(),
-      binding: AdminBinding(),
+      binding: AdminDashboardBinding(),
     ),
     GetPage(
       name: AppRoutes.addOfficer,
       page: () => const AddOfficerView(),
-      binding: AdminBinding(),
+      binding: AddOfficerBinding(),
     ),
     GetPage(
       name: AppRoutes.addStudent,
       page: () => const AddStudentView(),
-      binding: AdminBinding(),
+      binding: AddStudentBinding(),
     ),
     GetPage(
       name: AppRoutes.officerDashboard,

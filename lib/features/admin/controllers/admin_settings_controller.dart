@@ -17,6 +17,7 @@ class AdminSettingsController extends GetxController {
   final darkMode = false.obs;
   final emailNotif = true.obs;
   final inAppNotif = true.obs;
+  final autoApprove = false.obs;
 
   void saveSettings() {
     Get.snackbar("Success", "Settings saved successfully",

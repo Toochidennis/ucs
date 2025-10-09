@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucs/core/routes/app_routes.dart';
-import '../controllers/admin_controller.dart';
 import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/core/constants/app_color.dart';
+import 'package:ucs/features/admin/controllers/admin_officer_controller.dart';
 
-class OfficersView extends GetView<AdminController> {
+class OfficersView extends GetView<AdminOfficerController> {
   const OfficersView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Officers Management"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => Get.toNamed(AppRoutes.addOfficer),
-          ),
-        ],
-      ),
       body: Column(
         children: [
           // 🔍 Search Bar
