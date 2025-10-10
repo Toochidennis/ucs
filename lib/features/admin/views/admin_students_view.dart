@@ -4,41 +4,55 @@ import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/features/admin/controllers/admin_student_controller.dart';
 
-class StudentsView extends GetView<AdminStudentController> {
-  const StudentsView({super.key});
+class AdminStudentsView extends GetView<AdminStudentController> {
+  const AdminStudentsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Search by name or matric number",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+      backgroundColor: Colors.grey[50],
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search by name or matric number",
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
+                onChanged: (query) {
+                  // TODO: implement search logic
+                },
               ),
-              onChanged: (query) {
-                // TODO: implement search logic
-              },
             ),
           ),
 
-          Expanded(
-            child: Obx(() {
-              final students = controller.students; // RxList in controller
-              if (students.isEmpty) {
-                return Center(
-                  child: Text("No students found", style: AppFont.bodyMedium),
-                );
-              }
+          // --- Student List ---
+          Obx(() {
+            final students = controller.students;
 
-              return ListView.separated(
-                padding: const EdgeInsets.all(16),
+            if (students.isEmpty) {
+              return SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(
+                  child: Text(
+                    "No students found",
+                    style: AppFont.bodyMedium,
+                  ),
+                ),
+              );
+            }
+
+            return SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: SliverList.separated(
                 itemCount: students.length,
                 separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
@@ -49,9 +63,9 @@ class StudentsView extends GetView<AdminStudentController> {
                     student['department']!,
                   );
                 },
-              );
-            }),
-          ),
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -82,10 +96,10 @@ class StudentsView extends GetView<AdminStudentController> {
               // TODO: Delete student
             }
           },
-          itemBuilder: (context) => [
-            const PopupMenuItem(value: "view", child: Text("View Profile")),
-            const PopupMenuItem(value: "reset", child: Text("Reset Password")),
-            const PopupMenuItem(value: "delete", child: Text("Delete")),
+          itemBuilder: (context) => const [
+            PopupMenuItem(value: "view", child: Text("View Profile")),
+            PopupMenuItem(value: "reset", child: Text("Reset Password")),
+            PopupMenuItem(value: "delete", child: Text("Delete")),
           ],
         ),
       ),

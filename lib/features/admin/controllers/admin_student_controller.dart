@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
 
-class AdminStudentController extends GetxController{
-    final students = <Map<String, String>>[].obs;
+class AdminStudentController extends GetxController {
+  final students = <Map<String, String>>[].obs;
 
-    @override
+  @override
   void onInit() {
     super.onInit();
-        students.addAll([
+    students.addAll([
       {
         "name": "John Doe",
         "matricNo": "CSC/2019/001",

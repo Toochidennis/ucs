@@ -4,46 +4,56 @@ import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/features/admin/controllers/admin_officer_controller.dart';
 
-class OfficersView extends GetView<AdminOfficerController> {
-  const OfficersView({super.key});
+class AdminOfficersView extends GetView<AdminOfficerController> {
+  const AdminOfficersView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
+      backgroundColor: Colors.grey[50],
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        slivers: [
           // 🔍 Search Bar
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Search by name or unit",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search by name or unit",
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
+                onChanged: (query) {
+                  // TODO: implement search logic
+                },
               ),
-              onChanged: (query) {
-                // TODO: implement search logic
-              },
             ),
           ),
 
           // 📋 Officers List
-          Expanded(
-            child: Obx(() {
-              final officers = controller.officers; // RxList in controller
-              if (officers.isEmpty) {
-                return Center(
+          Obx(() {
+            final officers = controller.officers; // RxList from controller
+
+            if (officers.isEmpty) {
+              return SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(
                   child: Text(
                     "No officers found",
                     style: AppFont.bodyMedium,
                   ),
-                );
-              }
+                ),
+              );
+            }
 
-              return ListView.separated(
-                padding: const EdgeInsets.all(16),
+            return SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: SliverList.separated(
                 itemCount: officers.length,
                 separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
@@ -54,9 +64,9 @@ class OfficersView extends GetView<AdminOfficerController> {
                     officer['email']!,
                   );
                 },
-              );
-            }),
-          ),
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -69,7 +79,7 @@ class OfficersView extends GetView<AdminOfficerController> {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: const Color(AppColor.secondary),
-          child: Icon(Icons.person, color: const Color(AppColor.onSecondary)),
+          child: const Icon(Icons.person, color: Colors.white),
         ),
         title: Text(name, style: AppFont.bodyLarge),
         subtitle: Text("$unit • $email", style: AppFont.bodySmall),
@@ -84,10 +94,10 @@ class OfficersView extends GetView<AdminOfficerController> {
               // TODO: Remove officer
             }
           },
-          itemBuilder: (context) => [
-            const PopupMenuItem(value: "view", child: Text("View Details")),
-            const PopupMenuItem(value: "reset", child: Text("Reset Password")),
-            const PopupMenuItem(value: "remove", child: Text("Remove Officer")),
+          itemBuilder: (context) => const [
+            PopupMenuItem(value: "view", child: Text("View Details")),
+            PopupMenuItem(value: "reset", child: Text("Reset Password")),
+            PopupMenuItem(value: "remove", child: Text("Remove Officer")),
           ],
         ),
       ),

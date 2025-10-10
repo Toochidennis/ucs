@@ -29,8 +29,8 @@ class AdminDashboardView extends GetView<AdminDashboardController> {
               index: controller.currentTab.value,
               children: const [
                 AdminHomeView(),
-                StudentsView(),
-                OfficersView(),
+                AdminStudentsView(),
+                AdminOfficersView(),
                 WorkflowView(),
                 AdminSettingsView(),
               ],

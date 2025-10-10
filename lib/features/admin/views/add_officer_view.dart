@@ -29,104 +29,111 @@ class AddOfficerView extends GetView<AddOfficerController> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: controller.formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              FormSection(
-                title: "Personal Information",
-                children: [
-                  InputField(
-                    label: "Full Name *",
-                    controller: controller.fullName,
-                    required: true,
-                  ),
-                  InputField(
-                    label: "Email Address *",
-                    controller: controller.email,
-                    type: TextInputType.emailAddress,
-                    required: true,
-                  ),
-                  InputField(
-                    label: "Phone Number",
-                    controller: controller.phone,
-                    type: TextInputType.phone,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              FormSection(
-                title: "Role & Department",
-                children: [
-                  DropdownField(
-                    label: "Department *",
-                    selected: controller.department,
-                    options: const [
-                      "Finance Office",
-                      "Library",
-                      "Hostel Management",
-                      "Alumni Office",
-                      "Registry",
-                      "Security",
-                      "ICT Department",
+      body: Form(
+        key: controller.formKey,
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  // PERSONAL INFORMATION
+                  FormSection(
+                    title: "Personal Information",
+                    children: [
+                      InputField(
+                        label: "Full Name *",
+                        controller: controller.fullName,
+                        required: true,
+                      ),
+                      InputField(
+                        label: "Email Address *",
+                        controller: controller.email,
+                        type: TextInputType.emailAddress,
+                        required: true,
+                      ),
+                      InputField(
+                        label: "Phone Number",
+                        controller: controller.phone,
+                        type: TextInputType.phone,
+                      ),
                     ],
                   ),
-                  InputField(
-                    label: "Employee ID",
-                    controller: controller.employeeId,
-                  ),
-                ],
-              ),
 
-              const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-              FormSection(
-                title: "Permissions & Access",
-                children: [
-                  PasswordField(
-                    label: "Initial Password *",
-                    controller: controller.password,
-                    showPassword: controller.showPassword,
+                  // ROLE & DEPARTMENT
+                  FormSection(
+                    title: "Role & Department",
+                    children: [
+                      DropdownField(
+                        label: "Department *",
+                        selected: controller.department,
+                        options: const [
+                          "Finance Office",
+                          "Library",
+                          "Hostel Management",
+                          "Alumni Office",
+                          "Registry",
+                          "Security",
+                          "ICT Department",
+                        ],
+                      ),
+                      InputField(
+                        label: "Employee ID",
+                        controller: controller.employeeId,
+                      ),
+                    ],
                   ),
-                  ToggleTile(
-                    title: "Review Clearance Applications",
-                    subtitle:
-                        "Can review and approve/reject student applications",
-                    value: controller.canReview,
-                  ),
-                  ToggleTile(
-                    title: "Officer Status",
-                    subtitle: "Enable/disable officer",
-                    value: controller.officerStatus,
-                  ),
-                ],
-              ),
 
-              const SizedBox(height: 24),
+                  const SizedBox(height: 16),
 
-              // Buttons
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: controller.saveOfficer,
-                  child: const Text("Save Officer"),
-                ),
+                  // PERMISSIONS & ACCESS
+                  FormSection(
+                    title: "Permissions & Access",
+                    children: [
+                      PasswordField(
+                        label: "Initial Password *",
+                        controller: controller.password,
+                        showPassword: controller.showPassword,
+                      ),
+                      ToggleTile(
+                        title: "Review Clearance Applications",
+                        subtitle:
+                            "Can review and approve/reject student applications",
+                        value: controller.canReview,
+                      ),
+                      ToggleTile(
+                        title: "Officer Status",
+                        subtitle: "Enable/disable officer account",
+                        value: controller.officerStatus,
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // ACTION BUTTONS
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: controller.saveOfficer,
+                      child: const Text("Save Officer"),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () => Get.back(),
+                      child: const Text("Cancel"),
+                    ),
+                  ),
+                ]),
               ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => Get.back(),
-                  child: const Text("Cancel"),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

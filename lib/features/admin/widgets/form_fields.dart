@@ -53,7 +53,7 @@ class DropdownField extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Obx(
         () => DropdownButtonFormField<String>(
-          value: selected.value.isEmpty ? null : selected.value,
+          initialValue: selected.value.isEmpty ? null : selected.value,
           items: options
               .map((e) => DropdownMenuItem(value: e, child: Text(e)))
               .toList(),

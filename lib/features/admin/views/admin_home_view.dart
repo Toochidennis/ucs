@@ -20,7 +20,6 @@ class AdminHomeView extends GetView<AdminHomeController> {
             padding: const EdgeInsets.all(16),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                // --- Grid of Compact Stats ---
                 GridView.count(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -62,7 +61,6 @@ class AdminHomeView extends GetView<AdminHomeController> {
 
                 const SizedBox(height: 24),
 
-                // --- Quick Actions Card ---
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
