@@ -1,0 +1,29 @@
+{
+    "project_info": {
+        "project_number": "786686607287",
+        "project_id": "unn-ucs",
+        "storage_bucket": "unn-ucs.firebasestorage.app"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:786686607287:android:44b6426b0d98b83ef6b232",
+                "android_client_info": {
+                    "package_name": "com.chinex.ucs"
+                }
+            },
+            "oauth_client": [],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyCSMd8T-q0-DXKuqTCc7pUEViGy5z9uclc"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": []
+                }
+            }
+        }
+    ],
+    "configuration_version": "1"
+}
