@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ucs/core/routes/app_routes.dart';
 import 'package:ucs/data/models/login.dart';
 import 'package:ucs/data/repositories/auth_repository.dart';
@@ -45,6 +46,11 @@ class AuthController extends GetxController {
       if (user != null) {
         currentUser.value = user;
 
+        // Save user to storage
+        final box = GetStorage();
+        box.write('user', user.toJson());
+
+        // Navigate by role
         if (user.isAdmin) {
           Get.offAllNamed(AppRoutes.adminDashboard);
         } else if (user.isOfficer) {
@@ -75,10 +81,10 @@ class AuthController extends GetxController {
     });
   }
 
-  Future<void> _updateFcmToken(Login user) async {
-    // For example:
-    // await repo.updateFcmToken(user.id, newToken, user.userType);
-  }
+  // Future<void> _updateFcmToken(Login user) async {
+  //   // For example:
+  //   // await repo.updateFcmToken(user.id, newToken, user.userType);
+  // }
 
   Future<void> logout() async {
     try {

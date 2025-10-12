@@ -6,6 +6,7 @@ import 'package:ucs/features/admin/views/add_student_view.dart';
 import 'package:ucs/features/admin/views/admin_dashboard_view.dart';
 import 'package:ucs/features/admin/bindings/admin_dashboard_binding.dart';
 import 'package:ucs/features/auth/bindings/auth_binding.dart';
+import 'package:ucs/features/auth/controllers/splash_controller.dart';
 import 'package:ucs/features/auth/views/login_view.dart';
 import 'package:ucs/features/auth/views/splash_view.dart';
 import 'package:ucs/features/officer/bindings/officer_binding.dart';
@@ -19,7 +20,9 @@ class AppPages {
     GetPage(
       name: AppRoutes.splash,
       page: () => const SplashView(),
-      binding: AuthBinding(),
+      binding: BindingsBuilder(() {
+        Get.put(SplashController());
+      }),
     ),
     GetPage(
       name: AppRoutes.login,
