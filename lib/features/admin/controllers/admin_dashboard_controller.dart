@@ -40,7 +40,7 @@ class AdminDashboardController extends GetxController {
         break;
 
       case 3:
-        appBarTitle.value = 'Workflow Settings';
+        appBarTitle.value = 'Clearance Workflow';
         appBarActions.value = [];
         break;
 

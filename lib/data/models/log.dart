@@ -3,7 +3,7 @@ class Log {
   final int status;
   final String method;
   final String path;
-  final String response;
+  final dynamic response;
 
   Log({
     required this.date,

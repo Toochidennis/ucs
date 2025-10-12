@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucs/features/admin/widgets/toggle_tile.dart';
 import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/features/admin/controllers/workflow_controller.dart';
@@ -22,25 +21,16 @@ class WorkflowView extends GetView<WorkflowController> {
               padding: const EdgeInsets.all(16),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Clearance Workflow", style: AppFont.titleMedium),
-                      TextButton.icon(
-                        icon: const Icon(Icons.add),
-                        label: const Text("Add Unit"),
-                        onPressed: () => _showUnitSheet(context),
-                      ),
-                    ],
-                  ),
+                  Text("Clearance Units", style: AppFont.titleMedium),
                   const SizedBox(height: 12),
-
                   controller.units.isEmpty
                       ? Center(
                           child: Padding(
                             padding: const EdgeInsets.only(top: 50),
-                            child: Text("No clearance units available",
-                                style: AppFont.bodyMedium),
+                            child: Text(
+                              "No clearance units available",
+                              style: AppFont.bodyMedium,
+                            ),
                           ),
                         )
                       : ReorderableListView.builder(
@@ -50,15 +40,19 @@ class WorkflowView extends GetView<WorkflowController> {
                           onReorder: controller.reorderUnits,
                           itemBuilder: (context, index) {
                             final unit = controller.units[index];
-                            return _buildUnitItem(
+                            return KeyedSubtree(
                               key: ValueKey(unit["id"]),
-                              icon: unit["icon"],
-                              title: unit["title"],
-                              enabled: unit["enabled"],
-                              color: unit["color"],
-                              onTap: () => _showUnitSheet(context, unit: unit),
-                              onToggle: (val) =>
-                                  controller.toggleUnit(unit, val),
+                              child: _buildUnitItem(
+                                key: ValueKey(unit['id']),
+                                icon: controller.iconFromKey(unit["icon_key"]),
+                                title: unit["title"],
+                                enabled: unit["enabled"],
+                                color: Colors.blue.withValues(alpha: 0.1),
+                                onTap: () =>
+                                    _showEditInstructionSheet(context, unit),
+                                onToggle: (val) =>
+                                    controller.toggleUnit(unit, val),
+                              ),
                             );
                           },
                         ),
@@ -104,8 +98,8 @@ class WorkflowView extends GetView<WorkflowController> {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: color.withValues(alpha: 0.2),
-                  child: Icon(icon, color: color),
+                  backgroundColor: color,
+                  child: Icon(icon, color: Colors.blue),
                 ),
                 const SizedBox(width: 12),
                 Text(title, style: AppFont.bodyMedium),
@@ -127,20 +121,15 @@ class WorkflowView extends GetView<WorkflowController> {
     );
   }
 
-  void _showUnitSheet(BuildContext context, {Map<String, dynamic>? unit}) {
+  void _showEditInstructionSheet(
+    BuildContext context,
+    Map<String, dynamic> unit,
+  ) {
     final ctrl = Get.find<WorkflowController>();
-
     final formKey = GlobalKey<FormState>();
-    final titleCtrl = TextEditingController(text: unit?["title"] ?? "");
-    final instructionCtrl =
-        TextEditingController(text: unit?["instructions"] ?? "");
-    final RxBool enabled = (unit?["enabled"] ?? true).obs;
-
-    final bool isEditing = unit != null;
-    ctrl.selectedRequirements.value =
-        List<String>.from(unit?["requirements"] ?? []);
-    ctrl.suggestedRequirements.value =
-        List<String>.from(unit?["requirements"] ?? []);
+    final instructionCtrl = TextEditingController(
+      text: unit["instructions"] ?? "",
+    );
 
     showModalBottomSheet(
       context: context,
@@ -158,105 +147,34 @@ class WorkflowView extends GetView<WorkflowController> {
             bottom: MediaQuery.of(context).viewInsets.bottom + 16,
           ),
           child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
             child: Form(
               key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    isEditing ? "Edit Clearance Unit" : "Add Clearance Unit",
-                    style: AppFont.titleMedium,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Unit Title
-                  TextFormField(
-                    controller: titleCtrl,
-                    readOnly: unit?["is_default"] ?? false,
-                    decoration: InputDecoration(
-                      labelText: "Unit Title",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    validator: (v) => (v == null || v.trim().isEmpty)
-                        ? "Please enter a unit title"
-                        : null,
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  ToggleTile(
-                    title: "Enable Unit",
-                    subtitle: "Allow this clearance unit to be active",
-                    value: enabled,
-                  ),
-
+                  Text("Edit Instructions", style: AppFont.titleMedium),
                   const SizedBox(height: 12),
-
-                  // Requirements
-                  Obx(() {
-                    if (ctrl.suggestedRequirements.isEmpty) {
-                      return const SizedBox();
-                    }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Requirements",
-                            style: AppFont.bodyMedium
-                                .copyWith(fontWeight: FontWeight.w600)),
-                        const SizedBox(height: 10),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: ctrl.suggestedRequirements.map((req) {
-                            final selected =
-                                ctrl.selectedRequirements.contains(req);
-                            return ChoiceChip(
-                              label: Text(req),
-                              selected: selected,
-                              selectedColor: const Color(AppColor.primary)
-                                  .withValues(alpha: 0.15),
-                              onSelected: (_) => ctrl.toggleRequirement(req),
-                              labelStyle: TextStyle(
-                                color: selected
-                                    ? const Color(AppColor.primary)
-                                    : Colors.grey[800],
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    );
-                  }),
-
-                  const SizedBox(height: 16),
-
-                  // Instruction field
+                  Text(unit["title"], style: AppFont.bodyLarge),
+                  const SizedBox(height: 10),
                   TextFormField(
                     controller: instructionCtrl,
                     maxLines: 6,
                     validator: (v) => (v == null || v.trim().isEmpty)
-                        ? "Please enter clearance instructions"
+                        ? "Enter instructions"
                         : null,
                     decoration: InputDecoration(
-                      alignLabelWithHint: true,
                       labelText: "Instructions / Guidelines",
-                      hintText:
-                          "Enter detailed guidance for students in this clearance unit...",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.save),
-                      label: Text(isEditing ? "Save Changes" : "Save Unit"),
+                      label: const Text("Save Changes"),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(AppColor.primary),
                         padding: const EdgeInsets.symmetric(vertical: 14),
@@ -266,23 +184,10 @@ class WorkflowView extends GetView<WorkflowController> {
                       ),
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
-                          if (isEditing) {
-                            unit?["instructions"] = instructionCtrl.text.trim();
-                            unit?["requirements"] =
-                                ctrl.selectedRequirements.toList();
-                            unit?["enabled"] = enabled.value;
-                            ctrl.units.refresh();
-                            ctrl.saveUnitsToDB();
-                          } else {
-                            final icon =
-                                ctrl.getIconForUnit(titleCtrl.text.trim());
-                            ctrl.addUnitFromForm(
-                              titleCtrl.text.trim(),
-                              enabled.value,
-                              instructionCtrl.text,
-                              icon,
-                            );
-                          }
+                          ctrl.updateInstructions(
+                            unit,
+                            instructionCtrl.text.trim(),
+                          );
                           Get.back();
                         }
                       },
