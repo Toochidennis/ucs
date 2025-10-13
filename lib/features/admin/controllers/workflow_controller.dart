@@ -169,8 +169,9 @@ class WorkflowController extends GetxController {
     if (n.contains("finance")) return "finance";
     if (n.contains("library")) return "library";
     if (n.contains("alumni")) return "alumni";
-    if (n.contains("student") || n.contains("hostel"))
+    if (n.contains("student") || n.contains("hostel")) {
       return "students_affairs";
+    }
     if (n.contains("security")) return "security";
     if (n.contains("registrar")) return "registrar";
     if (n.contains("audit")) return "audit";

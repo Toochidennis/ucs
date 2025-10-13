@@ -3,113 +3,127 @@ import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/core/constants/app_font.dart';
 
 class AppTheme {
-  // Light mode
   static final light = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColor.seed,
       brightness: Brightness.light,
-      primary: const Color(AppColor.primary),
-      onPrimary: const Color(AppColor.onPrimary),
-      secondary: const Color(AppColor.secondary),
-      onSecondary: const Color(AppColor.onSecondary),
-      surface: const Color(AppColor.surface),
-      onSurface: const Color(AppColor.onSurface),
-      error: const Color(AppColor.error),
-      onError: const Color(AppColor.onError),
+      primary: AppColor.lightPrimary,
+      onPrimary: AppColor.lightOnPrimary,
+      secondary: AppColor.lightSecondary,
+      onSecondary: AppColor.lightOnSecondary,
+      background: AppColor.lightBackground,
+      surface: AppColor.lightSurface,
+      onSurface: AppColor.lightOnSurface,
+      error: AppColor.lightError,
+      onError: AppColor.lightOnError,
     ),
     textTheme: TextTheme(
-      headlineLarge: AppFont.titleLarge,
-      headlineMedium: AppFont.titleMedium,
-      headlineSmall: AppFont.titleSmall,
-      titleMedium: AppFont.subtitle,
-      bodyLarge: AppFont.bodyLarge,
-      bodyMedium: AppFont.bodyMedium,
-      bodySmall: AppFont.bodySmall,
-      labelLarge: AppFont.button,
-      labelSmall: AppFont.caption,
+      headlineLarge: AppFont.titleLarge.copyWith(color: AppColor.lightPrimary),
+      headlineMedium: AppFont.titleMedium.copyWith(
+        color: AppColor.lightPrimary,
+      ),
+      headlineSmall: AppFont.titleSmall.copyWith(
+        color: AppColor.lightOnSurface,
+      ),
+      bodyLarge: AppFont.bodyLarge.copyWith(color: AppColor.lightOnSurface),
+      bodyMedium: AppFont.bodyMedium.copyWith(color: AppColor.lightOnSurface),
+      bodySmall: AppFont.bodySmall.copyWith(color: Colors.black54),
+      labelLarge: AppFont.button.copyWith(color: Colors.white),
+      labelSmall: AppFont.caption.copyWith(color: Colors.black54),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      border: const OutlineInputBorder(),
+      filled: true,
+      fillColor: AppColor.lightSurface,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: AppColor.lightPrimary.withOpacity(0.2)),
+      ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: const Color(AppColor.primary)),
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: AppColor.lightPrimary, width: 1.5),
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(AppColor.primary),
-        foregroundColor: const Color(AppColor.onPrimary),
+        backgroundColor: AppColor.lightPrimary,
+        foregroundColor: AppColor.lightOnPrimary,
         textStyle: AppFont.button,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: const Color(AppColor.surface),
-      selectedItemColor: const Color(AppColor.primary),
-      unselectedItemColor: const Color(AppColor.onSurface),
+      backgroundColor: AppColor.lightSurface,
+      selectedItemColor: AppColor.lightPrimary,
+      unselectedItemColor: AppColor.lightOnSurface.withOpacity(0.7),
       selectedLabelStyle: AppFont.bodySmall.copyWith(
-        color: const Color(AppColor.primary),
+        color: AppColor.lightPrimary,
         fontWeight: FontWeight.w600,
       ),
       unselectedLabelStyle: AppFont.bodySmall.copyWith(
-        color: const Color(AppColor.onSurface),
+        color: AppColor.lightOnSurface,
       ),
-      type: BottomNavigationBarType.fixed,
       elevation: 8,
+      type: BottomNavigationBarType.fixed,
     ),
   );
 
-  // Dark mode
   static final dark = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColor.seed,
       brightness: Brightness.dark,
-      primary: const Color(AppColor.primary),
-      onPrimary: const Color(AppColor.onPrimary),
-      secondary: const Color(AppColor.secondary),
-      onSecondary: const Color(AppColor.onSecondary),
-      surface: const Color(0xFF121212), // Dark surface
-      onSurface: Colors.white70,
-      error: const Color(AppColor.error),
-      onError: const Color(AppColor.onError),
+      primary: AppColor.darkPrimary,
+      onPrimary: AppColor.darkOnPrimary,
+      secondary: AppColor.darkSecondary,
+      onSecondary: AppColor.darkOnSecondary,
+      background: AppColor.darkBackground,
+      surface: AppColor.darkSurface,
+      onSurface: AppColor.darkOnSurface,
+      error: AppColor.darkError,
+      onError: AppColor.darkOnError,
     ),
     textTheme: TextTheme(
       headlineLarge: AppFont.titleLarge.copyWith(color: Colors.white),
       headlineMedium: AppFont.titleMedium.copyWith(color: Colors.white),
-      headlineSmall: AppFont.titleSmall.copyWith(color: Colors.white),
-      titleMedium: AppFont.subtitle.copyWith(color: Colors.white70),
+      headlineSmall: AppFont.titleSmall.copyWith(color: Colors.white70),
       bodyLarge: AppFont.bodyLarge.copyWith(color: Colors.white),
       bodyMedium: AppFont.bodyMedium.copyWith(color: Colors.white70),
       bodySmall: AppFont.bodySmall.copyWith(color: Colors.white60),
-      labelLarge: AppFont.button.copyWith(color: Colors.white),
+      labelLarge: AppFont.button.copyWith(color: Colors.black),
       labelSmall: AppFont.caption.copyWith(color: Colors.white54),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      border: const OutlineInputBorder(),
+      filled: true,
+      fillColor: AppColor.darkSurface,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.white24),
+      ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: const Color(AppColor.secondary)),
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: AppColor.darkSecondary, width: 1.5),
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(AppColor.secondary),
-        foregroundColor: const Color(AppColor.onSecondary),
+        backgroundColor: AppColor.darkSecondary,
+        foregroundColor: AppColor.darkOnSecondary,
         textStyle: AppFont.button,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: const Color(0xFF121212),
-      selectedItemColor: const Color(AppColor.secondary),
+      backgroundColor: AppColor.darkSurface,
+      selectedItemColor: AppColor.darkSecondary,
       unselectedItemColor: Colors.white70,
       selectedLabelStyle: AppFont.bodySmall.copyWith(
-        color: const Color(AppColor.secondary),
+        color: AppColor.darkSecondary,
         fontWeight: FontWeight.w600,
       ),
-      unselectedLabelStyle: AppFont.bodySmall.copyWith(
-        color: Colors.white70,
-      ),
-      type: BottomNavigationBarType.fixed,
+      unselectedLabelStyle: AppFont.bodySmall.copyWith(color: Colors.white70),
       elevation: 8,
+      type: BottomNavigationBarType.fixed,
     ),
   );
 }

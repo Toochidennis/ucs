@@ -9,7 +9,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -19,7 +19,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
+                color: scheme.surface,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha:0.05),
@@ -43,14 +43,14 @@ class OfficerDashboardView extends GetView<OfficerController> {
                     controller.headerTitle.value,
                     style: AppFont.titleSmall.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: const Color(AppColor.onBackground),
+                      color: scheme.onSurface,
                     ),
                   ),
                   Container(
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: const Color(AppColor.primary),
+                      color: scheme.primary,
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: const Icon(Icons.person_outline,
@@ -64,8 +64,8 @@ class OfficerDashboardView extends GetView<OfficerController> {
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: controller.showDetail.value
-                    ? _buildDetailView()
-                    : _buildDashboardTabs(),
+                    ? _buildDetailView(scheme)
+                    : _buildDashboardTabs(scheme),
               ),
             ),
           ],
@@ -75,7 +75,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
   }
 
   // ---------------- Dashboard View ----------------
-  Widget _buildDashboardTabs() {
+  Widget _buildDashboardTabs(ColorScheme scheme) {
     return Column(
       children: [
         // Tabs
@@ -83,9 +83,9 @@ class OfficerDashboardView extends GetView<OfficerController> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
-              _tabButton("Pending", 0),
-              _tabButton("Approved", 1),
-              _tabButton("Rejected", 2),
+              _tabButton("Pending", 0,scheme),
+              _tabButton("Approved", 1, scheme),
+              _tabButton("Rejected", 2, scheme),
             ],
           ),
         ),
@@ -168,7 +168,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
   }
 
   // Tab Button
-  Widget _tabButton(String label, int index) {
+  Widget _tabButton(String label, int index, ColorScheme scheme) {
     final isActive = controller.currentTab.value == index;
     return Expanded(
       child: GestureDetector(
@@ -179,7 +179,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
             border: Border(
               bottom: BorderSide(
                 color: isActive
-                    ? const Color(AppColor.primary)
+                    ? scheme.primary
                     : Colors.transparent,
                 width: 2,
               ),
@@ -190,7 +190,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
             textAlign: TextAlign.center,
             style: AppFont.bodyMedium.copyWith(
               color: isActive
-                  ? const Color(AppColor.primary)
+                  ? scheme.primary
                   : Colors.grey.shade600,
               fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
             ),
@@ -201,7 +201,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
   }
 
   // ---------------- Detail View ----------------
-  Widget _buildDetailView() {
+  Widget _buildDetailView(ColorScheme scheme) {
     return Column(
       children: [
         Expanded(
@@ -225,7 +225,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
                 itemBuilder: (_, i) {
                   final doc = controller.documents[i];
                   return GestureDetector(
-                    onTap: () => controller.openDocument(doc),
+                    onTap: () => openDocument(doc),
                     child: Column(
                       children: [
                         ClipRRect(
@@ -241,7 +241,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
                         Text(doc['title']!,
                             textAlign: TextAlign.center,
                             style: AppFont.bodySmall.copyWith(
-                                color: const Color(AppColor.onSurface))),
+                                color: scheme.primary)),
                       ],
                     ),
                   );
@@ -308,6 +308,81 @@ class OfficerDashboardView extends GetView<OfficerController> {
           ),
         ),
       ],
+    );
+  }
+
+   void openDocument(Map<String, String> doc) {
+    Get.dialog(
+      Dialog(
+        insetPadding: const EdgeInsets.all(16),
+        backgroundColor: Colors.transparent,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Header
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            doc['title']!,
+                            style:  TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: Get.back,
+                          icon: const Icon(Icons.close, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Image Preview
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      doc['image']!,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Footer Text
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      "Preview only — downloads are restricted",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

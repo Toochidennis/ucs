@@ -10,27 +10,28 @@ class AuthService {
     required String identifier,
     required String password,
   }) async {
+    print('credentials {$identifier, $password}');
     final officerMap = await SupabaseService.table('officers')
         .select()
-        .or('email.eq.$identifier,officer_id.eq.$identifier')
+        .or('email.eq."$identifier",officer_id.eq."$identifier"')
         .limit(1)
-        .maybeSingle();
+        .single();
 
-    if (officerMap != null) {
-      final officer = Officer.fromJson(officerMap);
-      if (_checkPassword(password, officer.password)) {
-        final userRole = officer.role == UserRole.admin
-            ? UserRole.admin
-            : UserRole.officer;
-        return Login(
-          userRole: userRole,
-          raw: officerMap,
-          id: officer.id,
-          displayName: officer.name,
-        );
-      }
+    print('officer $officerMap');
+
+    final officer = Officer.fromJson(officerMap);
+    if (_checkPassword(password, officer.password)) {
+      final userRole = officer.role == UserRole.admin
+          ? UserRole.admin
+          : UserRole.officer;
+      return Login(
+        userRole: userRole,
+        raw: officerMap,
+        id: officer.id,
+        displayName: officer.name,
+      );
     }
-
+  
     final studentMap = await SupabaseService.table('students')
         .select()
         .or('matric_no.eq.$identifier,email.eq.$identifier')

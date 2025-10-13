@@ -2,6 +2,7 @@
 /// 🧠 Global Application Enums
 /// For UNN e-Clearance System
 /// ===============================
+library;
 
 /// 🔹 Gender Enum
 enum Gender { male, female, other }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/constants/app_font.dart';
-import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/features/admin/controllers/admin_officer_controller.dart';
 
 class AdminOfficersView extends GetView<AdminOfficerController> {
@@ -9,6 +8,8 @@ class AdminOfficersView extends GetView<AdminOfficerController> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: CustomScrollView(
@@ -43,10 +44,7 @@ class AdminOfficersView extends GetView<AdminOfficerController> {
               return SliverFillRemaining(
                 hasScrollBody: false,
                 child: Center(
-                  child: Text(
-                    "No officers found",
-                    style: AppFont.bodyMedium,
-                  ),
+                  child: Text("No officers found", style: AppFont.bodyMedium),
                 ),
               );
             }
@@ -62,6 +60,7 @@ class AdminOfficersView extends GetView<AdminOfficerController> {
                     officer['name']!,
                     officer['unit']!,
                     officer['email']!,
+                    scheme,
                   );
                 },
               ),
@@ -72,13 +71,18 @@ class AdminOfficersView extends GetView<AdminOfficerController> {
     );
   }
 
-  Widget _buildOfficerCard(String name, String unit, String email) {
+  Widget _buildOfficerCard(
+    String name,
+    String unit,
+    String email,
+    ColorScheme scheme,
+  ) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 2,
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: const Color(AppColor.secondary),
+          backgroundColor: scheme.primary,
           child: const Icon(Icons.person, color: Colors.white),
         ),
         title: Text(name, style: AppFont.bodyLarge),

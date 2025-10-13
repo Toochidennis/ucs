@@ -43,6 +43,8 @@ class AuthController extends GetxController {
         passwordCtrl.text.trim(),
       );
 
+      print('user $user');
+
       if (user != null) {
         currentUser.value = user;
 
@@ -62,9 +64,27 @@ class AuthController extends GetxController {
         passwordError.value = 'Invalid credentials';
       }
     } catch (e) {
-      passwordError.value = 'Login error: ${e.toString()}';
+      passwordError.value = _parseError(e);
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  String _parseError(dynamic error) {
+    final message = error.toString().toLowerCase();
+    if (message.contains('network') ||
+        message.contains('socket') ||
+        message.contains('timeout')) {
+      return 'Network error. Please check your connection.';
+    } else if (message.contains('unauthorized') ||
+        message.contains('invalid') ||
+        message.contains('401')) {
+      return 'Invalid credentials. Try again.';
+    } else if (message.contains('500') || message.contains('server')) {
+      return 'Server error. Please try again later.';
+    } else {
+      print(error);
+      return 'Something went wrong. Please try again.';
     }
   }
 
@@ -90,7 +110,6 @@ class AuthController extends GetxController {
     try {
       await repo.logout();
       currentUser.value = null;
-      Get.offAllNamed(AppRoutes.login);
     } catch (_) {}
   }
 

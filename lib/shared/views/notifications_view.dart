@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucs/core/constants/app_color.dart';
-import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/shared/controllers/notifications_controller.dart';
 
 class NotificationsView extends GetView<NotificationsController> {
@@ -24,10 +22,10 @@ class NotificationsView extends GetView<NotificationsController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Notifications", style: AppFont.titleSmall),
+                Text("Notifications", style: theme.textTheme.titleSmall),
                 TextButton(
                   onPressed: controller.markAllRead,
-                  child: Text("Mark all read", style: AppFont.subtitle),
+                  child: Text("Mark all read", style: theme.textTheme.titleMedium),
                 ),
               ],
             ),
@@ -47,6 +45,7 @@ class NotificationsView extends GetView<NotificationsController> {
                     time: n.time,
                     icon: n.icon,
                     color: n.color,
+                    theme: theme,
                     isNew: n.isNew,
                     isOld: n.isOld,
                   );
@@ -66,13 +65,14 @@ class NotificationsView extends GetView<NotificationsController> {
     required String time,
     required IconData icon,
     required Color color,
+    required ThemeData theme,
     bool isNew = false,
     bool isOld = false,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: isNew ? color.withOpacity(0.08) : const Color(AppColor.surface),
+        color: isNew ? color.withOpacity(0.08) : theme.colorScheme.surface,
         border: Border.all(
           color: isNew ? color.withOpacity(0.3) : Colors.grey.shade300,
         ),
@@ -98,39 +98,35 @@ class NotificationsView extends GetView<NotificationsController> {
                       // Title
                       Text(
                         title,
-                        style: AppFont.bodyMedium.copyWith(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: isNew
                               ? color // highlight with brand/accent color
                               : isOld
-                              ? const Color(AppColor.onSurface).withOpacity(
+                              ? theme.colorScheme.onSurface.withOpacity(
                                   0.7,
                                 ) // faded
-                              : const Color(AppColor.onBackground),
+                              : theme.colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       // Message
                       Text(
                         message,
-                        style: AppFont.bodySmall.copyWith(
+                        style: theme.textTheme.bodySmall?.copyWith(
                           color: isNew
                               ? color
-                              : const Color(
-                                  AppColor.onSurface,
-                                ).withOpacity(0.7),
+                              : theme.colorScheme.onSurface.withOpacity(0.7),
                         ),
                       ),
                       const SizedBox(height: 4),
                       // Time
                       Text(
                         time,
-                        style: AppFont.caption.copyWith(
+                        style: theme.textTheme.bodySmall?.copyWith(
                           color: isNew
                               ? color.withOpacity(0.8)
-                              : const Color(
-                                  AppColor.onSurface,
-                                ).withOpacity(0.6),
+                              : theme.colorScheme.onSurface.withOpacity(0.6),
                         ),
                       ),
                     ],

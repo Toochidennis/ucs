@@ -7,6 +7,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SupabaseService.initialize();
   await GetStorage.init();
-  
+  GetStorage().erase();
+
   runApp(const AppRoot());
 }

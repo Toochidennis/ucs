@@ -61,7 +61,7 @@ class StudentDashboardView extends GetView<StudentController> {
                       child: Container(
                         padding: const EdgeInsets.all(3),
                         decoration: const BoxDecoration(
-                          color: Color(AppColor.error),
+                          color: Colors.red,
                           shape: BoxShape.circle,
                         ),
                         child: const Text(

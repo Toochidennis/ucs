@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/constants/app_font.dart';
-import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/features/admin/controllers/admin_student_controller.dart';
 
 class AdminStudentsView extends GetView<AdminStudentController> {
@@ -9,6 +8,8 @@ class AdminStudentsView extends GetView<AdminStudentController> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: CustomScrollView(
@@ -42,10 +43,7 @@ class AdminStudentsView extends GetView<AdminStudentController> {
               return SliverFillRemaining(
                 hasScrollBody: false,
                 child: Center(
-                  child: Text(
-                    "No students found",
-                    style: AppFont.bodyMedium,
-                  ),
+                  child: Text("No students found", style: AppFont.bodyMedium),
                 ),
               );
             }
@@ -61,6 +59,7 @@ class AdminStudentsView extends GetView<AdminStudentController> {
                     student['name']!,
                     student['matricNo']!,
                     student['department']!,
+                    scheme,
                   );
                 },
               ),
@@ -71,13 +70,18 @@ class AdminStudentsView extends GetView<AdminStudentController> {
     );
   }
 
-  Widget _buildStudentCard(String name, String matricNo, String department) {
+  Widget _buildStudentCard(
+    String name,
+    String matricNo,
+    String department,
+    ColorScheme scheme,
+  ) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 2,
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: const Color(AppColor.primary),
+          backgroundColor: scheme.primary,
           child: Text(
             name[0].toUpperCase(),
             style: AppFont.bodyMedium.copyWith(color: Colors.white),

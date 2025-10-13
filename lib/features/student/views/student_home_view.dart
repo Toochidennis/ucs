@@ -123,14 +123,14 @@ class StudentHomeView extends GetView<StudentController> {
                         color: Colors.green,
                         title: "Finance Office",
                         subtitle: "Approved",
-                        subtitleStyle: AppFont.success,
+                        subtitleStyle: AppFont.bodySmall,
                       ),
                       _progressItem(
                         icon: Icons.access_time,
                         color: Colors.orange,
                         title: "Library",
                         subtitle: "Pending Review",
-                        subtitleStyle: AppFont.warning,
+                        subtitleStyle: AppFont.caption,
                       ),
                       _progressItem(
                         icon: Icons.more_horiz,

@@ -38,7 +38,7 @@ class ClearanceDetailView extends GetView<ClearanceController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Library Clearance", style: AppFont.titleSmall),
-                        Text("Pending Review", style: AppFont.warning),
+                        Text("Pending Review", style: theme.textTheme.bodySmall),
                       ],
                     ),
                   )

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/features/admin/controllers/workflow_controller.dart';
 
@@ -9,6 +8,7 @@ class WorkflowView extends GetView<WorkflowController> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: Colors.grey[50],
       body: Obx(
@@ -49,9 +49,10 @@ class WorkflowView extends GetView<WorkflowController> {
                                 enabled: unit["enabled"],
                                 color: Colors.blue.withValues(alpha: 0.1),
                                 onTap: () =>
-                                    _showEditInstructionSheet(context, unit),
+                                    _showEditInstructionSheet(context, unit, scheme),
                                 onToggle: (val) =>
                                     controller.toggleUnit(unit, val),
+                                scheme: scheme,
                               ),
                             );
                           },
@@ -74,6 +75,7 @@ class WorkflowView extends GetView<WorkflowController> {
     required Color color,
     required Function(bool) onToggle,
     required VoidCallback onTap,
+    required ColorScheme scheme,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -111,7 +113,7 @@ class WorkflowView extends GetView<WorkflowController> {
                 Switch(
                   value: enabled,
                   onChanged: onToggle,
-                  activeThumbColor: const Color(AppColor.primary),
+                  activeThumbColor: scheme.primary,
                 ),
               ],
             ),
@@ -124,6 +126,7 @@ class WorkflowView extends GetView<WorkflowController> {
   void _showEditInstructionSheet(
     BuildContext context,
     Map<String, dynamic> unit,
+    ColorScheme scheme,
   ) {
     final ctrl = Get.find<WorkflowController>();
     final formKey = GlobalKey<FormState>();
@@ -176,7 +179,7 @@ class WorkflowView extends GetView<WorkflowController> {
                       icon: const Icon(Icons.save),
                       label: const Text("Save Changes"),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(AppColor.primary),
+                        backgroundColor: scheme.primary,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

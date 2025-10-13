@@ -31,7 +31,7 @@ class StudentProfileView extends GetView<StudentProfileController> {
                   Text("Profile", style: AppFont.titleSmall),
                   TextButton(
                     onPressed: () => controller.editProfile(),
-                    child: Text("Edit", style: AppFont.subtitle),
+                    child: Text("Edit", style: AppFont.titleMedium),
                   ),
                 ],
               ),
@@ -44,11 +44,11 @@ class StudentProfileView extends GetView<StudentProfileController> {
                 children: [
                   CircleAvatar(
                     radius: 48,
-                    backgroundColor: const Color(AppColor.primary),
+                    backgroundColor: theme.colorScheme.primary,
                     child: Text(
                       "SJ",
                       style: AppFont.titleLarge.copyWith(
-                        color: const Color(AppColor.onPrimary),
+                        color: theme.colorScheme.onPrimary,
                       ),
                     ),
                   ),
@@ -213,7 +213,7 @@ class StudentProfileView extends GetView<StudentProfileController> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeThumbColor: const Color(AppColor.primary),
+            activeThumbColor: Colors.green,
           )
         ],
       ),

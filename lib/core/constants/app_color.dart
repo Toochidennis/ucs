@@ -1,26 +1,28 @@
-  class AppColor {
-    // Core brand
-    static const int primary = 0xFF006B3F; // Deep UNN Green
-    static const int primaryVariant =
-        0xFF004D2A; // Darker green (headers, emphasis)
+import 'package:flutter/material.dart';
 
-    static const int secondary = 0xFFFFC107; // Gold/Yellow accent
-    static const int secondaryVariant = 0xFFFFA000; // Darker gold
+class AppColor {
+  // Seed color (UNN Green)
+  static const seed = Color(0xFF006B3F);
 
-    // Neutral palette
-    static const int background = 0xFFFFFFFF; // White background
-    static const int surface =
-        0xFFFFFFFF; // Light gray for cards/containers 0xFFF5F5F5
+  // Light Colors
+  static const lightPrimary = Color(0xFF006B3F);
+  static const lightOnPrimary = Colors.white;
+  static const lightSecondary = Color(0xFFFFC107);
+  static const lightOnSecondary = Colors.black;
+  static const lightBackground = Color(0xFFFDFDFD);
+  static const lightSurface = Color(0xFFF7F7F7);
+  static const lightOnSurface = Color(0xFF1A1A1A);
+  static const lightError = Color(0xFFD32F2F);
+  static const lightOnError = Colors.white;
 
-    // Error/alerts
-    static const int error = 0xFFD32F2F; // Red for errors
-    static const int warning = 0xFFFF9800; // Orange for warnings
-    static const int success = 0xFF388E3C; // Success green
-
-    // Text & contrast
-    static const int onPrimary = 0xFFFFFFFF; // White text/icons on green
-    static const int onSecondary = 0xFF000000; // Dark text/icons on yellow
-    static const int onBackground = 0xFF000000; // Default black text
-    static const int onSurface = 0xFF000000; // Dark gray text on cards 0xFF212121
-    static const int onError = 0xFFFFFFFF; // White text on red
-  }
+  // Dark Colors
+  static const darkPrimary = Color(0xFF57D9A3);
+  static const darkOnPrimary = Colors.black;
+  static const darkSecondary = Color(0xFFFFC107);
+  static const darkOnSecondary = Colors.black;
+  static const darkBackground = Color(0xFF0D0D0D);
+  static const darkSurface = Color(0xFF121212);
+  static const darkOnSurface = Colors.white70;
+  static const darkError = Color(0xFFCF6679);
+  static const darkOnError = Colors.black;
+}
