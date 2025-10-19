@@ -14,7 +14,7 @@ class UserDeviceService {
   }) async {
     final device = UserDevice.newDevice(
       userId: userId,
-      userRole: userRole.value,
+      userRole: userRole,
       fcmToken: fcmToken,
       deviceName: deviceName,
       platform: platform,

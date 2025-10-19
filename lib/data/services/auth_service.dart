@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ucs/core/routes/app_routes.dart';
@@ -22,8 +20,6 @@ class AuthService {
 
     if (user != null) {
       final token = await FcmUtil.getDeviceToken();
-
-      debugPrint('token $token');
 
       if (token != null && token.isNotEmpty) {
         await _deviceService.registerDevice(

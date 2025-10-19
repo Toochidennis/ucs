@@ -1,5 +1,4 @@
 import 'package:bcrypt/bcrypt.dart';
-import 'package:flutter/material.dart';
 import 'package:ucs/data/models/enums.dart';
 import 'package:ucs/data/models/login.dart';
 import 'package:ucs/data/models/officer.dart';
@@ -17,8 +16,6 @@ class AuthRepository {
         .or('email.eq."$identifier",officer_id.eq."$identifier"')
         .limit(1)
         .single();
-
-    debugPrint('Officer: $officerMap');
 
     if (officerMap.isNotEmpty) {
       final officer = Officer.fromJson(officerMap);

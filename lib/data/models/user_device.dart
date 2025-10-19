@@ -24,7 +24,7 @@ class UserDevice {
 
   factory UserDevice.newDevice({
     required String userId,
-    required String userRole,
+    required UserRole userRole,
     required String fcmToken,
     String? deviceName,
     String? platform,
@@ -32,7 +32,7 @@ class UserDevice {
     return UserDevice(
       id: const Uuid().v4(),
       userId: userId,
-      userRole: UserRoleExtension.fromString(userRole),
+      userRole: userRole,
       fcmToken: fcmToken,
       deviceName: deviceName,
       platform: platform,
