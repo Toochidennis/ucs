@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/features/admin/controllers/workflow_controller.dart';
+import 'package:ucs/data/models/clearance_unit.dart';
+import 'package:ucs/data/models/clearance_requirement.dart';
 
 class WorkflowView extends GetView<WorkflowController> {
   const WorkflowView({super.key});
@@ -9,199 +11,199 @@ class WorkflowView extends GetView<WorkflowController> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.grey[50],
-      body: Obx(
-        () => CustomScrollView(
-          physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.all(16),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  Text("Clearance Units", style: AppFont.titleMedium),
-                  const SizedBox(height: 12),
-                  controller.units.isEmpty
-                      ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 50),
-                            child: Text(
-                              "No clearance units available",
-                              style: AppFont.bodyMedium,
-                            ),
-                          ),
-                        )
-                      : ReorderableListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: controller.units.length,
-                          onReorder: controller.reorderUnits,
-                          itemBuilder: (context, index) {
-                            final unit = controller.units[index];
-                            return KeyedSubtree(
-                              key: ValueKey(unit["id"]),
-                              child: _buildUnitItem(
-                                key: ValueKey(unit['id']),
-                                icon: controller.iconFromKey(unit["icon_key"]),
-                                title: unit["title"],
-                                enabled: unit["enabled"],
-                                color: Colors.blue.withValues(alpha: 0.1),
-                                onTap: () =>
-                                    _showEditInstructionSheet(context, unit, scheme),
-                                onToggle: (val) =>
-                                    controller.toggleUnit(unit, val),
-                                scheme: scheme,
-                              ),
-                            );
-                          },
-                        ),
-                  const SizedBox(height: 80),
-                ]),
-              ),
-            ),
-          ],
-        ),
-      ),
+      appBar: AppBar(title: const Text('Clearance Workflow')),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.units.isEmpty) {
+          return const Center(child: Text('No clearance units found'));
+        }
+
+        return ReorderableListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: controller.units.length,
+          onReorder: controller.reorderUnits,
+          itemBuilder: (context, index) {
+            final unit = controller.units[index];
+            return _buildUnitCard(
+              context,
+              unit,
+              scheme,
+              key: ValueKey(unit.id),
+            );
+          },
+        );
+      }),
     );
   }
 
-  Widget _buildUnitItem({
-    required Key key,
-    required IconData icon,
-    required String title,
-    required bool enabled,
-    required Color color,
-    required Function(bool) onToggle,
-    required VoidCallback onTap,
-    required ColorScheme scheme,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        key: key,
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12.withValues(alpha: 0.05),
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: color,
-                  child: Icon(icon, color: Colors.blue),
-                ),
-                const SizedBox(width: 12),
-                Text(title, style: AppFont.bodyMedium),
-              ],
-            ),
-            Row(
-              children: [
-                Icon(Icons.drag_handle, color: Colors.grey[400]),
-                Switch(
-                  value: enabled,
-                  onChanged: onToggle,
-                  activeThumbColor: scheme.primary,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showEditInstructionSheet(
+  Widget _buildUnitCard(
     BuildContext context,
-    Map<String, dynamic> unit,
-    ColorScheme scheme,
-  ) {
+    ClearanceUnit unit,
+    ColorScheme scheme, {
+    required Key key,
+  }) {
     final ctrl = Get.find<WorkflowController>();
-    final formKey = GlobalKey<FormState>();
-    final instructionCtrl = TextEditingController(
-      text: unit["instructions"] ?? "",
-    );
 
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 20,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-          ),
-          child: SingleChildScrollView(
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Edit Instructions", style: AppFont.titleMedium),
-                  const SizedBox(height: 12),
-                  Text(unit["title"], style: AppFont.bodyLarge),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: instructionCtrl,
-                    maxLines: 6,
-                    validator: (v) => (v == null || v.trim().isEmpty)
-                        ? "Enter instructions"
-                        : null,
-                    decoration: InputDecoration(
-                      labelText: "Instructions / Guidelines",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+    return Card(
+      key: key,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      elevation: 1,
+      child: ExpansionTile(
+        initiallyExpanded: false,
+        leading: const Icon(Icons.layers),
+        title: Text(unit.unitName, style: AppFont.bodyLarge),
+        subtitle: Text(
+          "Position: ${unit.position}",
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
+        ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Instructions", style: AppFont.bodyMedium),
+                const SizedBox(height: 6),
+                TextFormField(
+                  initialValue: unit.instructions,
+                  maxLines: 4,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "Edit instructions",
                   ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.save),
-                      label: const Text("Save Changes"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: scheme.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          ctrl.updateInstructions(
-                            unit,
-                            instructionCtrl.text.trim(),
-                          );
-                          Get.back();
-                        }
+                  onFieldSubmitted: (val) {
+                    final updated = ClearanceUnit(
+                      id: unit.id,
+                      unitName: unit.unitName,
+                      instructions: val.trim(),
+                      icon: unit.icon,
+                      position: unit.position,
+                      createdAt: unit.createdAt,
+                      requirements: unit.requirements,
+                    );
+                    ctrl.saveUnit(updated);
+                  },
+                ),
+                const SizedBox(height: 20),
+                Text("Requirements", style: AppFont.bodyMedium),
+                const SizedBox(height: 8),
+                ReorderableListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: unit.requirements.length,
+                  onReorder: (oldIndex, newIndex) =>
+                      ctrl.reorderRequirements(unit, oldIndex, newIndex),
+                  itemBuilder: (context, i) {
+                    final req = unit.requirements[i];
+                    return _buildRequirementTile(
+                      context,
+                      req,
+                      scheme,
+                      key: ValueKey(req.id),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRequirementTile(
+    BuildContext context,
+    ClearanceRequirement req,
+    ColorScheme scheme, {
+    required Key key,
+  }) {
+    final ctrl = Get.find<WorkflowController>();
+    final titleCtrl = TextEditingController(text: req.title);
+    final descCtrl = TextEditingController(text: req.description ?? "");
+
+    return Card(
+      key: key,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      color: Colors.grey[50],
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: titleCtrl,
+              decoration: const InputDecoration(
+                labelText: "Requirement Title",
+                border: OutlineInputBorder(),
+              ),
+              onFieldSubmitted: (val) {
+                final updated = ClearanceRequirement(
+                  id: req.id,
+                  unitId: req.unitId,
+                  title: val.trim(),
+                  description: req.description,
+                  isMandatory: req.isMandatory,
+                  position: req.position,
+                  createdAt: req.createdAt,
+                );
+                ctrl.saveRequirement(updated);
+              },
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: descCtrl,
+              maxLines: 2,
+              decoration: const InputDecoration(
+                labelText: "Description (optional)",
+                border: OutlineInputBorder(),
+              ),
+              onFieldSubmitted: (val) {
+                final updated = ClearanceRequirement(
+                  id: req.id,
+                  unitId: req.unitId,
+                  title: req.title,
+                  description: val.trim().isEmpty ? null : val.trim(),
+                  isMandatory: req.isMandatory,
+                  position: req.position,
+                  createdAt: req.createdAt,
+                );
+                ctrl.saveRequirement(updated);
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Checkbox(
+                      value: req.isMandatory,
+                      onChanged: (v) {
+                        final updated = ClearanceRequirement(
+                          id: req.id,
+                          unitId: req.unitId,
+                          title: req.title,
+                          description: req.description,
+                          isMandatory: v ?? true,
+                          position: req.position,
+                          createdAt: req.createdAt,
+                        );
+                        ctrl.saveRequirement(updated);
                       },
                     ),
-                  ),
-                ],
-              ),
+                    const Text("Mandatory"),
+                  ],
+                ),
+                const Icon(Icons.drag_handle, color: Colors.grey),
+              ],
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }
