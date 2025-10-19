@@ -89,7 +89,6 @@ class AddOfficerView extends GetView<AddOfficerController> {
 
                   const SizedBox(height: 16),
 
-                  // PERMISSIONS & ACCESS
                   FormSection(
                     title: "Permissions & Access",
                     children: [

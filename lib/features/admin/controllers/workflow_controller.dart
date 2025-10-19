@@ -74,7 +74,7 @@ class WorkflowController extends GetxController {
             "Upload your hostel receipts or accommodation clearance documents. If you stayed off campus, upload your off-campus clearance receipts instead. Visit the Students’ Affairs Department (Clearance Room) if receipts are missing or need verification.",
       },
       {
-        "title": "Security",
+        "title": "Security Unit",
         "requirements": [
           "₦150 security clearance payment receipt",
           "School ID card",
@@ -166,7 +166,7 @@ class WorkflowController extends GetxController {
 
   String getIconKeyForUnit(String name) {
     final n = name.toLowerCase();
-    if (n.contains("finance")) return "finance";
+    if (n.contains("bursary")) return "bursary";
     if (n.contains("library")) return "library";
     if (n.contains("alumni")) return "alumni";
     if (n.contains("student") || n.contains("hostel")) {
@@ -181,7 +181,7 @@ class WorkflowController extends GetxController {
 
   IconData iconFromKey(String key) {
     switch (key) {
-      case "finance":
+      case "bursary":
         return Icons.receipt_long_rounded;
       case "library":
         return Icons.menu_book_rounded;
