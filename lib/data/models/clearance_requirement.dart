@@ -4,7 +4,8 @@ class ClearanceRequirement {
   final String title;
   final String? description;
   final bool isMandatory;
-  final DateTime createdAt;
+  final int position;
+  final DateTime? createdAt;
 
   ClearanceRequirement({
     required this.id,
@@ -12,7 +13,8 @@ class ClearanceRequirement {
     required this.title,
     this.description,
     this.isMandatory = true,
-    required this.createdAt,
+    required this.position,
+    this.createdAt,
   });
 
   factory ClearanceRequirement.fromJson(Map<String, dynamic> json) =>
@@ -22,7 +24,10 @@ class ClearanceRequirement {
         title: json['title'],
         description: json['description'],
         isMandatory: json['is_mandatory'] ?? true,
-        createdAt: DateTime.parse(json['created_at']),
+        position: json['position'] ?? 0,
+        createdAt: json['created_at'] != null
+            ? DateTime.parse(json['created_at'])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,6 +36,7 @@ class ClearanceRequirement {
         'title': title,
         'description': description,
         'is_mandatory': isMandatory,
-        'created_at': createdAt.toIso8601String(),
+        'position': position,
+        'created_at': createdAt?.toIso8601String(),
       };
 }
