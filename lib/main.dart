@@ -9,7 +9,7 @@ Future<void> main() async {
   await FirebaseService.init();
   await SupabaseService.initialize();
   await GetStorage.init();
-  GetStorage().erase();
+  //GetStorage().erase();
 
   runApp(const AppRoot());
 }

@@ -59,7 +59,7 @@ class UserDevice {
   Map<String, dynamic> toJson() => {
     'id': id,
     'user_id': userId,
-    'user_role': userRole,
+    'user_role': userRole.name,
     'fcm_token': fcmToken,
     'device_name': deviceName,
     'platform': platform,
