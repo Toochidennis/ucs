@@ -17,9 +17,9 @@ class LoginView extends GetView<AuthController> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              scheme.primary.withOpacity(0.95),
-              scheme.primary.withOpacity(0.85),
-              scheme.surface,
+              scheme.primary.withValues(alpha: 0.95),
+              scheme.primary.withValues(alpha: 0.85),
+              scheme.primary.withValues(alpha: 0.75),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -35,7 +35,6 @@ class LoginView extends GetView<AuthController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // --- Logo + Titles ---
                     Column(
                       children: [
                         Container(
@@ -46,7 +45,7 @@ class LoginView extends GetView<AuthController> {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: scheme.shadow.withOpacity(0.25),
+                                color: scheme.shadow.withValues(alpha: 0.25),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -75,7 +74,7 @@ class LoginView extends GetView<AuthController> {
                         Text(
                           "Welcome back to your clearance portal",
                           style: AppFont.bodySmall.copyWith(
-                            color: scheme.onPrimary.withOpacity(0.85),
+                            color: scheme.onPrimary.withValues(alpha: 0.85),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -84,7 +83,6 @@ class LoginView extends GetView<AuthController> {
 
                     const SizedBox(height: 50),
 
-                    // --- Inputs (no card, no container) ---
                     Form(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -111,7 +109,9 @@ class LoginView extends GetView<AuthController> {
                                   controller.hidePassword.value
                                       ? Icons.visibility_off_outlined
                                       : Icons.visibility_outlined,
-                                  color: scheme.onSurface.withOpacity(0.6),
+                                  color: scheme.onSurface.withValues(
+                                    alpha: 0.6,
+                                  ),
                                   size: 20,
                                 ),
                               ),
@@ -129,7 +129,9 @@ class LoginView extends GetView<AuthController> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: scheme.primary,
                                 foregroundColor: scheme.onPrimary,
-                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -175,7 +177,7 @@ class LoginView extends GetView<AuthController> {
                     Text(
                       "Powered by Toochi Natasha 2025",
                       style: AppFont.caption.copyWith(
-                        color: scheme.onPrimary.withOpacity(0.6),
+                        color: scheme.onPrimary.withValues(alpha: 0.6),
                       ),
                     ),
                   ],
@@ -205,16 +207,21 @@ class LoginView extends GetView<AuthController> {
             controller: controller,
             obscureText: obscureText,
             decoration: InputDecoration(
-              prefixIcon: Icon(icon, color: scheme.onSurface.withOpacity(0.7)),
+              prefixIcon: Icon(
+                icon,
+                color: scheme.onSurface.withValues(alpha: 0.7),
+              ),
               suffixIcon: suffixIcon,
               hintText: hint,
               hintStyle: AppFont.bodySmall.copyWith(
-                color: scheme.onSurface.withOpacity(0.6),
+                color: scheme.onSurface.withValues(alpha: 0.6),
               ),
               filled: true, // keep inputs readable over gradient
-              fillColor: scheme.surface.withOpacity(0.95),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              fillColor: scheme.surface.withValues(alpha: 0.95),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,

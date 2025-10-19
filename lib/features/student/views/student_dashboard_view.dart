@@ -5,7 +5,6 @@ import 'package:ucs/features/student/views/clearance_detail_view.dart';
 import 'package:ucs/features/student/views/student_home_view.dart';
 import 'package:ucs/features/student/views/student_profile_view.dart';
 import 'package:ucs/shared/views/notifications_view.dart';
-import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/core/constants/app_font.dart';
 
 class StudentDashboardView extends GetView<StudentController> {

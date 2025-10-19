@@ -11,7 +11,7 @@ class Student {
   final String? phoneNumber;
   final DateTime? dob;
   final Gender gender;
-  final String major;
+  final String? major;
   final String faculty;
   final String department;
   final String level;
@@ -30,7 +30,7 @@ class Student {
     this.phoneNumber,
     this.dob,
     required this.gender,
-    required this.major,
+    this.major,
     required this.faculty,
     required this.department,
     required this.level,

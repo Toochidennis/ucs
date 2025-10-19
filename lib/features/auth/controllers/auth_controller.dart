@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/core/routes/app_routes.dart';
 import 'package:ucs/data/models/login.dart';
-import 'package:ucs/data/repositories/auth_repository.dart';
+import 'package:ucs/data/services/auth_service.dart';
 
 class AuthController extends GetxController {
-  final repo = AuthRepository();
+  final _service = AuthService();
 
   final idCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
@@ -38,21 +40,19 @@ class AuthController extends GetxController {
 
     isLoading.value = true;
     try {
-      final user = await repo.login(
-        idCtrl.text.trim(),
-        passwordCtrl.text.trim(),
+      final user = await _service.login(
+        identifier: idCtrl.text.trim(),
+        password: passwordCtrl.text.trim(),
       );
-
-      print('user $user');
 
       if (user != null) {
         currentUser.value = user;
 
-        // Save user to storage
+        // Save user locally
         final box = GetStorage();
         box.write('user', user.toJson());
 
-        // Navigate by role
+        // Navigate based on role
         if (user.isAdmin) {
           Get.offAllNamed(AppRoutes.adminDashboard);
         } else if (user.isOfficer) {
@@ -70,6 +70,14 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> logout() async {
+    try {
+      _showLoading();
+      await _service.logout(currentUser.value);
+      currentUser.value = null;
+    } catch (_) {}
+  }
+
   String _parseError(dynamic error) {
     final message = error.toString().toLowerCase();
     if (message.contains('network') ||
@@ -83,7 +91,7 @@ class AuthController extends GetxController {
     } else if (message.contains('500') || message.contains('server')) {
       return 'Server error. Please try again later.';
     } else {
-      print(error);
+      debugPrint('error $error');
       return 'Something went wrong. Please try again.';
     }
   }
@@ -101,16 +109,17 @@ class AuthController extends GetxController {
     });
   }
 
-  // Future<void> _updateFcmToken(Login user) async {
-  //   // For example:
-  //   // await repo.updateFcmToken(user.id, newToken, user.userType);
-  // }
+  void _showLoading() {
+    final context = Get.overlayContext;
+    if (context == null) return;
 
-  Future<void> logout() async {
-    try {
-      await repo.logout();
-      currentUser.value = null;
-    } catch (_) {}
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(
+        child: SpinKitChasingDots(color: AppColor.lightPrimary, size: 48),
+      ),
+    );
   }
 
   @override

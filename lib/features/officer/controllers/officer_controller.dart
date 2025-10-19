@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucs/core/constants/app_color.dart';
 
 class OfficerController extends GetxController {
   // Tabs

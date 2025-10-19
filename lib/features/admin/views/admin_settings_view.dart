@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/features/admin/controllers/admin_settings_controller.dart';
 import 'package:ucs/features/admin/widgets/toggle_tile.dart';

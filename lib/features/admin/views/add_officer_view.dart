@@ -114,7 +114,6 @@ class AddOfficerView extends GetView<AddOfficerController> {
 
                   const SizedBox(height: 24),
 
-                  // ACTION BUTTONS
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(

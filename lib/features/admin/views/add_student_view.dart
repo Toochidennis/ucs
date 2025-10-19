@@ -4,7 +4,6 @@ import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/features/admin/controllers/add_student_controller.dart';
 import 'package:ucs/features/admin/widgets/form_fields.dart';
 import 'package:ucs/features/admin/widgets/form_section.dart';
-import 'package:ucs/features/admin/widgets/toggle_tile.dart';
 
 class AddStudentView extends GetView<AddStudentController> {
   const AddStudentView({super.key});
@@ -17,12 +16,16 @@ class AddStudentView extends GetView<AddStudentController> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Get.back(),
         ),
-        title: Column(
-          children: [
-            Text("Add New Student", style: AppFont.titleMedium),
-          ],
-        ),
-        centerTitle: true,
+        title: Text("Add New Student", style: AppFont.titleMedium),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: ElevatedButton(
+              onPressed: controller.submitForm,
+              child: const Text("Save"),
+            ),
+          ),
+        ],
       ),
       body: Obx(
         () => Form(
@@ -34,7 +37,6 @@ class AddStudentView extends GetView<AddStudentController> {
                 padding: const EdgeInsets.all(16),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
-                    // PERSONAL INFORMATION
                     FormSection(
                       title: "Personal Information",
                       children: [
@@ -70,56 +72,48 @@ class AddStudentView extends GetView<AddStudentController> {
                           label: "Gender",
                           selected: controller.gender,
                           options: const ["Male", "Female"],
+                          required: true,
                         ),
                       ],
                     ),
 
                     const SizedBox(height: 20),
 
-                    // ACADEMIC INFORMATION
                     FormSection(
                       title: "Academic Information",
                       children: [
                         InputField(
                           label: "Matric No *",
-                          controller: controller.studentId,
+                          controller: controller.matricNo,
                           required: true,
                         ),
-                        InputField(
-                          label: "Major / Field of Study",
-                          controller: controller.major,
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // FACULTY AND DEPARTMENT
-                    FormSection(
-                      title: "Faculty and Department Assignment",
-                      children: [
                         DropdownField(
                           label: "Faculty *",
                           selected: controller.faculty,
                           options: controller.faculties.keys.toList(),
+                          required: true,
                         ),
                         DropdownField(
                           label: "Department *",
                           selected: controller.department,
-                          options: controller
-                                  .departments[controller.faculty.value] ??
+                          options:
+                              controller.departments[controller
+                                  .faculty
+                                  .value] ??
                               [],
+                          required: true,
                         ),
-                        InputField(
-                          label: "Academic Advisor",
-                          controller: controller.advisor,
+                        DropdownField(
+                          label: "Level *",
+                          selected: controller.level,
+                          options: ['400L', '500L'],
+                          required: true,
                         ),
                       ],
                     ),
 
                     const SizedBox(height: 20),
 
-                    // ACCOUNT SETTINGS
                     FormSection(
                       title: "Account Settings",
                       children: [
@@ -128,41 +122,16 @@ class AddStudentView extends GetView<AddStudentController> {
                           controller: controller.password,
                           showPassword: controller.showPassword,
                         ),
-                        ToggleTile(
-                          title: "Student Status",
-                          subtitle: "Enable/disable student account",
-                          value: controller.studentStatus,
-                        ),
-                        ToggleTile(
-                          title: "Send Login Details via Email",
-                          subtitle:
-                              "Automatically send login credentials to student",
-                          value: controller.studentStatus,
+                        DropdownField(
+                          label: "Status",
+                          selected: controller.studentStatus,
+                          options: ["Pending", "Cleared", "Suspended"],
+                          required: true,
                         ),
                       ],
                     ),
 
                     const SizedBox(height: 24),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () => Get.back(),
-                            child: const Text("Cancel"),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: controller.isFormValid.value
-                                ? controller.submitForm
-                                : null,
-                            child: const Text("Add Student"),
-                          ),
-                        ),
-                      ],
-                    ),
                   ]),
                 ),
               ),

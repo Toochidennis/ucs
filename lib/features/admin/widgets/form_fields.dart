@@ -24,12 +24,13 @@ class InputField extends StatelessWidget {
         keyboardType: type,
         validator: required
             ? (v) =>
-                (v == null || v.trim().isEmpty) ? "$label is required" : null
+                  (v == null || v.trim().isEmpty) ? "$label is required" : null
             : null,
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
+        textCapitalization: TextCapitalization.words,
       ),
     );
   }
@@ -39,12 +40,14 @@ class DropdownField extends StatelessWidget {
   final String label;
   final RxString selected;
   final List<String> options;
+  final bool required;
 
   const DropdownField({
     super.key,
     required this.label,
     required this.selected,
     required this.options,
+    this.required = false,
   });
 
   @override
@@ -62,6 +65,11 @@ class DropdownField extends StatelessWidget {
             labelText: label,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
+          validator: required
+              ? (v) => (v == null || v.trim().isEmpty)
+                    ? "$label is required"
+                    : null
+              : null,
         ),
       ),
     );
@@ -72,11 +80,7 @@ class DateField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
 
-  const DateField({
-    super.key,
-    required this.label,
-    required this.controller,
-  });
+  const DateField({super.key, required this.label, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -133,9 +137,7 @@ class PasswordField extends StatelessWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             suffixIcon: IconButton(
               icon: Icon(
-                showPassword.value
-                    ? Icons.visibility_off
-                    : Icons.visibility,
+                showPassword.value ? Icons.visibility_off : Icons.visibility,
               ),
               onPressed: () => showPassword.value = !showPassword.value,
             ),
