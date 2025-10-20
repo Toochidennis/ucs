@@ -1,45 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:ucs/data/models/enums.dart';
+import 'package:ucs/data/models/clearance_unit.dart';
+import 'package:ucs/data/services/officer_service.dart';
+import 'package:ucs/core/constants/app_color.dart';
 
 class AddOfficerController extends GetxController {
   final formKey = GlobalKey<FormState>();
+  final _service = OfficerService();
 
   // Inputs
   final fullName = TextEditingController();
   final email = TextEditingController();
   final phone = TextEditingController();
-  final role = TextEditingController();
-  final employeeId = TextEditingController();
+  final officerId = TextEditingController();
   final password = TextEditingController();
-
-  // Dropdowns
-  final department = "".obs;
+  final gender = "Male".obs;
+  final unit = "".obs;
 
   // Toggles
   final canReview = false.obs;
-  final officerStatus = true.obs;
-
   final showPassword = false.obs;
 
-  // Submit
-  void saveOfficer() {
-    if (formKey.currentState?.validate() ?? false) {
-      Get.dialog(
-        AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Text("Officer Added Successfully"),
-          content: const Text(
-              "The new officer has been added and will receive login credentials via email."),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Get.back(),
-              child: const Text("Continue"),
-            )
-          ],
-        ),
+  final units = <ClearanceUnit>[].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadUnits();
+  }
+
+  Future<void> loadUnits() async {
+    try {
+      final data = await _service.fetchUnits();
+      units.assignAll(data);
+    } catch (e) {
+      debugPrint('$e');
+      Get.snackbar(
+        "Error",
+        "Unable to load clearance units. Please try again later.",
+        backgroundColor: Colors.red[50],
       );
+    }
+  }
+
+  Future<void> saveOfficer() async {
+    if (!(formKey.currentState?.validate() ?? false)) return;
+
+    showDialog(
+      context: Get.context!,
+      barrierDismissible: false,
+      builder: (_) => Center(
+        child: SpinKitChasingDots(color: AppColor.lightPrimary, size: 48),
+      ),
+    );
+
+    try {
+      final selectedUnit = units.firstWhere(
+        (u) => u.unitName == unit.value,
+        orElse: () => throw Exception("Unit not selected"),
+      );
+
+      await _service.saveOfficer(
+        name: fullName.text.trim(),
+        email: email.text.trim().isEmpty ? null : email.text.trim(),
+        phone: phone.text.trim().isEmpty ? null : phone.text.trim(),
+        officerId: officerId.text.trim(),
+        password: password.text.trim(),
+        gender: gender.value.toLowerCase() == 'male'
+            ? Gender.male
+            : Gender.female,
+        role: UserRole.officer,
+        canReview: canReview.value,
+        unitId: selectedUnit.id,
+      );
+
+      Get.back(); // close loading
+      Get.snackbar(
+        "Success",
+        "Officer added successfully.",
+        backgroundColor: Colors.green[50],
+      );
+      Get.back(); // go back
+    } catch (e) {
+      Get.back(); // close loading
+
+      String message = _parseError(e);
+      Get.snackbar("Error", message, backgroundColor: Colors.red[50]);
+    }
+  }
+
+  String _parseError(dynamic e) {
+    final msg = e.toString().toLowerCase();
+    if (msg.contains("exists") || msg.contains("duplicate")) {
+      return "An officer with this ID already exists.";
+    } else if (msg.contains("network") ||
+        msg.contains("timeout") ||
+        msg.contains("socket")) {
+      return "Network issue. Please check your connection.";
+    } else if (msg.contains("unit not selected")) {
+      return "Please select a valid clearance unit.";
+    } else {
+      return "Something went wrong while saving the officer. Please try again.";
     }
   }
 }

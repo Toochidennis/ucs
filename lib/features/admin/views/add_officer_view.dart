@@ -14,17 +14,16 @@ class AddOfficerView extends GetView<AddOfficerController> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text("Add New Officer"),
-        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Get.back(),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text(
-              "Cancel",
-              style: TextStyle(color: Colors.grey, fontSize: 14),
+          Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: ElevatedButton(
+              onPressed: controller.saveOfficer,
+              child: const Text("Save"),
             ),
           ),
         ],
@@ -48,15 +47,20 @@ class AddOfficerView extends GetView<AddOfficerController> {
                         required: true,
                       ),
                       InputField(
-                        label: "Email Address *",
+                        label: "Email Address",
                         controller: controller.email,
                         type: TextInputType.emailAddress,
-                        required: true,
                       ),
                       InputField(
                         label: "Phone Number",
                         controller: controller.phone,
                         type: TextInputType.phone,
+                      ),
+                      DropdownField(
+                        label: "Gender",
+                        selected: controller.gender,
+                        options: const ["Male", "Female"],
+                        required: true,
                       ),
                     ],
                   ),
@@ -65,24 +69,23 @@ class AddOfficerView extends GetView<AddOfficerController> {
 
                   // ROLE & DEPARTMENT
                   FormSection(
-                    title: "Role & Department",
+                    title: "Role & Unit",
                     children: [
                       DropdownField(
-                        label: "Department *",
-                        selected: controller.department,
-                        options: const [
-                          "Finance Office",
-                          "Library",
-                          "Hostel Management",
-                          "Alumni Office",
-                          "Registry",
-                          "Security",
-                          "ICT Department",
-                        ],
+                        label: "Unit *",
+                        selected: controller.unit,
+                        options: controller.units.map((u) => u.unitName).toList(),
+                        required: true,
                       ),
                       InputField(
-                        label: "Employee ID",
-                        controller: controller.employeeId,
+                        label: "Officer ID",
+                        controller: controller.officerId,
+                        required: true,
+                      ),
+                      PasswordField(
+                        label: "Initial Password *",
+                        controller: controller.password,
+                        showPassword: controller.showPassword,
                       ),
                     ],
                   ),
@@ -92,41 +95,13 @@ class AddOfficerView extends GetView<AddOfficerController> {
                   FormSection(
                     title: "Permissions & Access",
                     children: [
-                      PasswordField(
-                        label: "Initial Password *",
-                        controller: controller.password,
-                        showPassword: controller.showPassword,
-                      ),
                       ToggleTile(
                         title: "Review Clearance Applications",
                         subtitle:
                             "Can review and approve/reject student applications",
                         value: controller.canReview,
                       ),
-                      ToggleTile(
-                        title: "Officer Status",
-                        subtitle: "Enable/disable officer account",
-                        value: controller.officerStatus,
-                      ),
                     ],
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: controller.saveOfficer,
-                      child: const Text("Save Officer"),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      onPressed: () => Get.back(),
-                      child: const Text("Cancel"),
-                    ),
                   ),
                 ]),
               ),

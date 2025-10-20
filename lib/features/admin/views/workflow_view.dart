@@ -26,6 +26,7 @@ class WorkflowView extends GetView<WorkflowController> {
           padding: const EdgeInsets.all(16),
           itemCount: controller.units.length,
           onReorder: controller.reorderUnits,
+          physics: BouncingScrollPhysics(),
           itemBuilder: (context, index) {
             final unit = controller.units[index];
             return _buildUnitCard(
