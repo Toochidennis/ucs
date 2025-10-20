@@ -91,21 +91,21 @@ class WorkflowView extends GetView<WorkflowController> {
                 const SizedBox(height: 20),
                 Text("Requirements", style: AppFont.bodyMedium),
                 const SizedBox(height: 8),
-                ReorderableListView.builder(
+                ReorderableListView(
+                  key: ValueKey('req-${unit.id}'),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: unit.requirements.length,
                   onReorder: (oldIndex, newIndex) =>
                       ctrl.reorderRequirements(unit, oldIndex, newIndex),
-                  itemBuilder: (context, i) {
-                    final req = unit.requirements[i];
-                    return _buildRequirementTile(
-                      context,
-                      req,
-                      scheme,
-                      key: ValueKey(req.id),
-                    );
-                  },
+                  children: [
+                    for (final req in unit.requirements)
+                      _buildRequirementTile(
+                        context,
+                        req,
+                        scheme,
+                        key: ValueKey(req.id),
+                      ),
+                  ],
                 ),
               ],
             ),
@@ -191,6 +191,7 @@ class WorkflowView extends GetView<WorkflowController> {
                           position: req.position,
                           createdAt: req.createdAt,
                         );
+                        ctrl.updateRequirementInstantly(updated);
                         ctrl.saveRequirement(updated);
                       },
                     ),

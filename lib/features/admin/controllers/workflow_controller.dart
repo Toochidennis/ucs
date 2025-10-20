@@ -84,4 +84,15 @@ class WorkflowController extends GetxController {
     }
     _service.reorderRequirements(unit.id);
   }
+
+  void updateRequirementInstantly(ClearanceRequirement updated) {
+    for (var unit in units) {
+      final idx = unit.requirements.indexWhere((r) => r.id == updated.id);
+      if (idx != -1) {
+        unit.requirements[idx] = updated;
+        units.refresh();
+        break;
+      }
+    }
+  }
 }

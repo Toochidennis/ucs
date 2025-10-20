@@ -65,7 +65,6 @@ class WorkflowService {
         createdAt: unit.requirements[i].createdAt,
       );
     }
-
-    await _repo.reorderRequirements(unitId, unit.requirements);
+    await _repo.reorderRequirements(unit.requirements);
   }
 }
