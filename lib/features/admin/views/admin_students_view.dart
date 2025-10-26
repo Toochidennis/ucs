@@ -13,7 +13,7 @@ class AdminStudentsView extends GetView<AdminStudentController> {
     final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: RefreshIndicator.adaptive(
         onRefresh: controller.fetchStudents,
         child: CustomScrollView(
@@ -436,16 +436,16 @@ class AdminStudentsView extends GetView<AdminStudentController> {
     Color fg = scheme.onSurfaceVariant;
     switch (status.toLowerCase()) {
       case 'cleared':
-        bg = Colors.green.withOpacity(0.15);
-        fg = Colors.green[800]!;
+        bg = scheme.secondaryContainer;
+        fg = scheme.onSecondaryContainer;
         break;
       case 'in_progress':
-        bg = Colors.blue.withOpacity(0.12);
-        fg = Colors.blue[800]!;
+        bg = scheme.tertiaryContainer;
+        fg = scheme.onTertiaryContainer;
         break;
       case 'suspended':
-        bg = Colors.orange.withOpacity(0.15);
-        fg = Colors.orange[800]!;
+        bg = scheme.errorContainer;
+        fg = scheme.onErrorContainer;
         break;
       default:
         bg = scheme.surfaceContainerHighest;

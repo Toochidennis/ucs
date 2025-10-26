@@ -12,7 +12,7 @@ class AdminOfficersView extends GetView<AdminOfficerController> {
     final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: RefreshIndicator.adaptive(
         onRefresh: controller.loadOfficers,
         child: CustomScrollView(
@@ -77,8 +77,10 @@ class AdminOfficersView extends GetView<AdminOfficerController> {
                       elevation: 2,
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: scheme.primary,
-                          child: const Icon(Icons.person, color: Colors.white),
+                          backgroundColor: scheme.primary.withValues(
+                            alpha: 0.12,
+                          ),
+                          child: Icon(Icons.person, color: scheme.primary),
                         ),
                         title: Text(
                           officer['name'] ?? '',
@@ -142,7 +144,9 @@ class AdminOfficersView extends GetView<AdminOfficerController> {
                                     Get.snackbar(
                                       "Error",
                                       "Password and confirmation are required.",
-                                      backgroundColor: Colors.red[50],
+                                      backgroundColor: Theme.of(
+                                        Get.context!,
+                                      ).colorScheme.errorContainer,
                                     );
                                     return;
                                   }
@@ -150,7 +154,9 @@ class AdminOfficersView extends GetView<AdminOfficerController> {
                                     Get.snackbar(
                                       "Error",
                                       "Password must be at least 6 characters.",
-                                      backgroundColor: Colors.red[50],
+                                      backgroundColor: Theme.of(
+                                        Get.context!,
+                                      ).colorScheme.errorContainer,
                                     );
                                     return;
                                   }
@@ -158,7 +164,9 @@ class AdminOfficersView extends GetView<AdminOfficerController> {
                                     Get.snackbar(
                                       "Error",
                                       "Passwords do not match.",
-                                      backgroundColor: Colors.red[50],
+                                      backgroundColor: Theme.of(
+                                        Get.context!,
+                                      ).colorScheme.errorContainer,
                                     );
                                     return;
                                   }
@@ -210,6 +218,4 @@ class AdminOfficersView extends GetView<AdminOfficerController> {
       ),
     );
   }
-
-  // _buildOfficerCard removed; functionality inlined in itemBuilder to access id
 }

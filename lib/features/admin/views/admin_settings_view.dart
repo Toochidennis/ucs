@@ -12,7 +12,7 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Obx(
         () => CustomScrollView(
           physics: const BouncingScrollPhysics(),
@@ -44,8 +44,8 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
                     ElevatedButton.icon(
                       onPressed: () => controller.resetMyPassword(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade50,
-                        foregroundColor: scheme.primary,
+                        backgroundColor: scheme.primaryContainer,
+                        foregroundColor: scheme.onPrimaryContainer,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
@@ -158,8 +158,8 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
                       child: ElevatedButton.icon(
                         onPressed: controller.logout,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red.shade50,
-                          foregroundColor: Colors.red,
+                          backgroundColor: scheme.errorContainer,
+                          foregroundColor: scheme.onErrorContainer,
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -205,6 +205,7 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
     String title,
     List<Widget> children,
   ) {
+    final scheme = Theme.of(context).colorScheme;
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       elevation: 2,
@@ -219,7 +220,7 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
               title,
               style: AppFont.titleMedium.copyWith(
                 fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                color: scheme.onSurface,
               ),
             ),
             const SizedBox(height: 12),
@@ -244,14 +245,14 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
         decoration: InputDecoration(
           labelText: label,
           filled: true,
-          fillColor: Colors.grey[50],
+          fillColor: Theme.of(Get.context!).colorScheme.surface,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 14,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderSide: BorderSide(color: scheme.outlineVariant),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -280,14 +281,14 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
           hintText: 'Tap to pick a date',
           suffixIcon: const Icon(Icons.calendar_today),
           filled: true,
-          fillColor: Colors.grey[50],
+          fillColor: Theme.of(Get.context!).colorScheme.surface,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 14,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderSide: BorderSide(color: scheme.outlineVariant),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),

@@ -4,6 +4,7 @@ import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/features/admin/controllers/workflow_controller.dart';
 import 'package:ucs/data/models/clearance_unit.dart';
 import 'package:ucs/data/models/clearance_requirement.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class WorkflowView extends GetView<WorkflowController> {
   const WorkflowView({super.key});
@@ -13,31 +14,57 @@ class WorkflowView extends GetView<WorkflowController> {
     final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (controller.units.isEmpty) {
-          return const Center(child: Text('No clearance units found'));
-        }
-
-        return ReorderableListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: controller.units.length,
-          onReorder: controller.reorderUnits,
-          physics: BouncingScrollPhysics(),
-          itemBuilder: (context, index) {
-            final unit = controller.units[index];
-            return _buildUnitCard(
-              context,
-              unit,
-              scheme,
-              key: ValueKey(unit.id),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: RefreshIndicator.adaptive(
+        onRefresh: controller.loadUnits,
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return ListView(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 120),
+                  child: Center(
+                    child: SpinKitChasingDots(color: scheme.primary, size: 48),
+                  ),
+                ),
+              ],
             );
-          },
-        );
-      }),
+          }
+
+          if (controller.units.isEmpty) {
+            return ListView(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              children: const [
+                Padding(
+                  padding: EdgeInsets.only(top: 120),
+                  child: Center(child: Text('No clearance units found')),
+                ),
+              ],
+            );
+          }
+
+          return ReorderableListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: controller.units.length,
+            onReorder: controller.reorderUnits,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              final unit = controller.units[index];
+              return _buildUnitCard(
+                context,
+                unit,
+                scheme,
+                key: ValueKey(unit.id),
+              );
+            },
+          );
+        }),
+      ),
     );
   }
 
@@ -55,11 +82,11 @@ class WorkflowView extends GetView<WorkflowController> {
       elevation: 1,
       child: ExpansionTile(
         initiallyExpanded: false,
-        leading: const Icon(Icons.layers),
+        leading: Icon(Icons.layers, color: scheme.primary),
         title: Text(unit.unitName, style: AppFont.bodyLarge),
         subtitle: Text(
           "Position: ${unit.position}",
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
+          style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
         ),
         children: [
           Padding(
@@ -129,7 +156,7 @@ class WorkflowView extends GetView<WorkflowController> {
     return Card(
       key: key,
       margin: const EdgeInsets.symmetric(vertical: 6),
-      color: Colors.grey[50],
+      color: scheme.surface,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
@@ -199,7 +226,7 @@ class WorkflowView extends GetView<WorkflowController> {
                     const Text("Mandatory"),
                   ],
                 ),
-                const Icon(Icons.drag_handle, color: Colors.grey),
+                Icon(Icons.drag_handle, color: scheme.onSurfaceVariant),
               ],
             ),
           ],
