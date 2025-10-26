@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-// ---------- CONTROLLER ----------
 class AdminSettingsController extends GetxController {
   // Profile
   final name = "John Mitchell".obs;

@@ -8,7 +8,7 @@ class OfficerRepository {
   Future<List<ClearanceUnit>> fetchUnits() async {
     final response = await _supabase
         .from('clearance_units')
-        .select('id, unit_name, position')
+        .select('*')
         .order('position', ascending: true);
 
     return (response as List)
@@ -41,7 +41,7 @@ class OfficerRepository {
   Future<Officer?> fetchOfficerById(String id) async {
     final response = await _supabase
         .from('officers')
-        .select()
+        .select('*, clearance_units(unit_name)')
         .eq('id', id)
         .maybeSingle();
 
@@ -53,5 +53,9 @@ class OfficerRepository {
     // Filter out null or empty values
     updates.removeWhere((key, value) => value == null || value == '');
     await _supabase.from('officers').update(updates).eq('id', id);
+  }
+
+  Future<void> deleteOfficer(String id) async {
+    await _supabase.from('officers').delete().eq('id', id);
   }
 }

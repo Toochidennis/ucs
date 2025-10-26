@@ -71,11 +71,15 @@ class AddOfficerView extends GetView<AddOfficerController> {
                   FormSection(
                     title: "Role & Unit",
                     children: [
-                      DropdownField(
-                        label: "Unit *",
-                        selected: controller.unit,
-                        options: controller.units.map((u) => u.unitName).toList(),
-                        required: true,
+                      Obx(
+                        () => DropdownField(
+                          label: "Unit *",
+                          selected: controller.unit,
+                          options: controller.units
+                              .map((u) => u.unitName)
+                              .toList(),
+                          required: true,
+                        ),
                       ),
                       InputField(
                         label: "Officer ID",

@@ -36,7 +36,6 @@ class AddOfficerController extends GetxController {
       final data = await _service.fetchUnits();
       units.assignAll(data);
     } catch (e) {
-      debugPrint('$e');
       Get.snackbar(
         "Error",
         "Unable to load clearance units. Please try again later.",
@@ -76,19 +75,50 @@ class AddOfficerController extends GetxController {
         unitId: selectedUnit.id,
       );
 
-      Get.back(); // close loading
+      // Close loading dialog first
+      Get.back();
+
+      // Brief delay to ensure overlay settles before showing snackbar
+      await Future.delayed(const Duration(milliseconds: 75));
+
+      Get.closeAllSnackbars();
       Get.snackbar(
         "Success",
         "Officer added successfully.",
         backgroundColor: Colors.green[50],
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
       );
-      Get.back(); // go back
+
+      // Stay on this page and clear the form for a new entry
+      clearForm();
     } catch (e) {
       Get.back(); // close loading
 
       String message = _parseError(e);
       Get.snackbar("Error", message, backgroundColor: Colors.red[50]);
     }
+  }
+
+  void clearForm() {
+    // Unfocus any active input
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    // Clear text fields
+    fullName.clear();
+    email.clear();
+    phone.clear();
+    officerId.clear();
+    password.clear();
+
+    // Reset dropdowns/toggles
+    gender.value = "Male";
+    unit.value = "";
+    canReview.value = false;
+    showPassword.value = false;
+
+    // Reset form validation state
+    formKey.currentState?.reset();
   }
 
   String _parseError(dynamic e) {

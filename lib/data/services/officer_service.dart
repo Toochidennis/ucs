@@ -41,4 +41,15 @@ class OfficerService {
 
     await _repo.insertOfficer(officer);
   }
+
+  Future<List<Officer>> fetchAllOfficers() => _repo.fetchAllOfficers();
+
+  Future<void> resetOfficerPassword(String id, String newPassword) async {
+    final hash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+    await _repo.updateOfficer(id, {'password': hash});
+  }
+
+  Future<void> removeOfficer(String id) async {
+    await _repo.deleteOfficer(id);
+  }
 }
