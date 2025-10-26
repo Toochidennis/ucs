@@ -25,6 +25,9 @@ class AdminSettingsController extends GetxController {
   final name = ''.obs;
   final email = ''.obs;
   final phone = ''.obs;
+  final nameCtrl = TextEditingController();
+  final emailCtrl = TextEditingController();
+  final phoneCtrl = TextEditingController();
 
   // School/Settings fields
   final schoolName = ''.obs;
@@ -34,6 +37,11 @@ class AdminSettingsController extends GetxController {
   final clearanceDeadline = Rxn<DateTime>();
   final contactEmail = ''.obs;
   final contactPhone = ''.obs;
+  final schoolNameCtrl = TextEditingController();
+  final sessionCtrl = TextEditingController();
+  final semesterCtrl = TextEditingController();
+  final contactEmailCtrl = TextEditingController();
+  final contactPhoneCtrl = TextEditingController();
   final logoUrl = ''.obs;
 
   // App version
@@ -59,6 +67,9 @@ class AdminSettingsController extends GetxController {
       name.value = raw['name'] ?? currentUser.value?.displayName ?? '';
       email.value = raw['email'] ?? '';
       phone.value = raw['phone_number'] ?? '';
+      nameCtrl.text = name.value;
+      emailCtrl.text = email.value;
+      phoneCtrl.text = phone.value;
     }
   }
 
@@ -81,6 +92,13 @@ class AdminSettingsController extends GetxController {
       contactEmail.value = s.contactEmail ?? '';
       contactPhone.value = s.contactPhone ?? '';
       logoUrl.value = s.logoUrl ?? '';
+
+      // Populate controllers so UI reflects loaded values
+      schoolNameCtrl.text = schoolName.value;
+      sessionCtrl.text = session.value;
+      semesterCtrl.text = semester.value;
+      contactEmailCtrl.text = contactEmail.value;
+      contactPhoneCtrl.text = contactPhone.value;
     }
   }
 
@@ -110,17 +128,21 @@ class AdminSettingsController extends GetxController {
     try {
       final saved = await _settingsService.saveSettings(
         existing: settings.value,
-        schoolName: schoolName.value.trim(),
-        session: session.value.trim().isEmpty ? null : session.value.trim(),
-        semester: semester.value.trim().isEmpty ? null : semester.value.trim(),
+        schoolName: schoolNameCtrl.text.trim(),
+        session: sessionCtrl.text.trim().isEmpty
+            ? null
+            : sessionCtrl.text.trim(),
+        semester: semesterCtrl.text.trim().isEmpty
+            ? null
+            : semesterCtrl.text.trim(),
         autoApproveClearance: autoApprove.value,
         clearanceDeadline: clearanceDeadline.value,
-        contactEmail: contactEmail.value.trim().isEmpty
+        contactEmail: contactEmailCtrl.text.trim().isEmpty
             ? null
-            : contactEmail.value.trim(),
-        contactPhone: contactPhone.value.trim().isEmpty
+            : contactEmailCtrl.text.trim(),
+        contactPhone: contactPhoneCtrl.text.trim().isEmpty
             ? null
-            : contactPhone.value.trim(),
+            : contactPhoneCtrl.text.trim(),
         logoUrl: logoUrl.value.trim().isEmpty ? null : logoUrl.value.trim(),
       );
       settings.value = saved;
@@ -200,19 +222,23 @@ class AdminSettingsController extends GetxController {
       // Persist immediately
       final saved = await _settingsService.saveSettings(
         existing: settings.value,
-        schoolName: schoolName.value.trim().isEmpty
+        schoolName: schoolNameCtrl.text.trim().isEmpty
             ? (settings.value?.schoolName ?? '')
-            : schoolName.value.trim(),
-        session: session.value.trim().isEmpty ? null : session.value.trim(),
-        semester: semester.value.trim().isEmpty ? null : semester.value.trim(),
+            : schoolNameCtrl.text.trim(),
+        session: sessionCtrl.text.trim().isEmpty
+            ? null
+            : sessionCtrl.text.trim(),
+        semester: semesterCtrl.text.trim().isEmpty
+            ? null
+            : semesterCtrl.text.trim(),
         autoApproveClearance: autoApprove.value,
         clearanceDeadline: clearanceDeadline.value,
-        contactEmail: contactEmail.value.trim().isEmpty
+        contactEmail: contactEmailCtrl.text.trim().isEmpty
             ? null
-            : contactEmail.value,
-        contactPhone: contactPhone.value.trim().isEmpty
+            : contactEmailCtrl.text.trim(),
+        contactPhone: contactPhoneCtrl.text.trim().isEmpty
             ? null
-            : contactPhone.value,
+            : contactPhoneCtrl.text.trim(),
         logoUrl: logoUrl.value,
       );
       settings.value = saved;
@@ -331,11 +357,22 @@ class AdminSettingsController extends GetxController {
   }
 
   void logout() {
-    Get.snackbar(
-      'Logout',
-      'Logging out...',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.red.shade100,
-    );
+    if(Get.isRegistered<AuthController>()){
+      final auth = Get.find<AuthController>();
+      auth.logout();
+    }
+  }
+
+  @override
+  void onClose() {
+    nameCtrl.dispose();
+    emailCtrl.dispose();
+    phoneCtrl.dispose();
+    schoolNameCtrl.dispose();
+    sessionCtrl.dispose();
+    semesterCtrl.dispose();
+    contactEmailCtrl.dispose();
+    contactPhoneCtrl.dispose();
+    super.onClose();
   }
 }

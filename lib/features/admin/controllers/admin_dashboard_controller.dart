@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:ucs/core/constants/app_color.dart';
 import 'package:ucs/core/routes/app_routes.dart';
 import 'package:ucs/features/admin/controllers/admin_student_controller.dart';
 import 'package:ucs/features/admin/controllers/admin_officer_controller.dart';
@@ -10,7 +11,12 @@ class AdminDashboardController extends GetxController {
 
   final currentTab = 0.obs;
   var appBarTitle = 'Dashboard'.obs;
-  RxList<Widget> appBarActions = <Widget>[].obs;
+  RxList<Widget> appBarActions = <Widget>[
+    IconButton(
+      onPressed: () => {},
+      icon: const Icon(Icons.notifications, color: AppColor.lightPrimary),
+    ),
+  ].obs;
 
   void changeTab(int index) {
     currentTab.value = index;
@@ -18,7 +24,12 @@ class AdminDashboardController extends GetxController {
     switch (index) {
       case 0:
         appBarTitle.value = 'Dashboard';
-        appBarActions.value = [];
+        appBarActions.value = [
+          IconButton(
+            onPressed: () => {},
+            icon: Icon(Icons.notifications, color: AppColor.lightPrimary),
+          ),
+        ];
         break;
 
       case 1:

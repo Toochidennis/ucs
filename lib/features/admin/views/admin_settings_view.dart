@@ -22,9 +22,24 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   _settingsCard(context, "Profile Settings", [
-                    _inputField("Name", controller.name, scheme),
-                    _inputField("Email", controller.email, scheme),
-                    _inputField("Phone Number", controller.phone, scheme),
+                    _inputField(
+                      "Name",
+                      controller.nameCtrl,
+                      scheme,
+                      readOnly: true,
+                    ),
+                    _inputField(
+                      "Email",
+                      controller.emailCtrl,
+                      scheme,
+                      readOnly: true,
+                    ),
+                    _inputField(
+                      "Phone Number",
+                      controller.phoneCtrl,
+                      scheme,
+                      readOnly: true,
+                    ),
                     const Divider(height: 24),
                     ElevatedButton.icon(
                       onPressed: () => controller.resetMyPassword(context),
@@ -62,9 +77,13 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
                         ),
                       );
                     }),
-                    _inputField("School Name", controller.schoolName, scheme),
-                    _inputField("Session", controller.session, scheme),
-                    _inputField("Semester", controller.semester, scheme),
+                    _inputField(
+                      "School Name",
+                      controller.schoolNameCtrl,
+                      scheme,
+                    ),
+                    _inputField("Session", controller.sessionCtrl, scheme),
+                    _inputField("Semester", controller.semesterCtrl, scheme),
                     _dateField(
                       context,
                       label: 'Clearance Deadline',
@@ -75,12 +94,12 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
                     const SizedBox(height: 4),
                     _inputField(
                       "Contact Email",
-                      controller.contactEmail,
+                      controller.contactEmailCtrl,
                       scheme,
                     ),
                     _inputField(
                       "Contact Phone",
-                      controller.contactPhone,
+                      controller.contactPhoneCtrl,
                       scheme,
                     ),
                     OutlinedButton.icon(
@@ -211,12 +230,17 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
     );
   }
 
-  Widget _inputField(String label, RxString value, ColorScheme scheme) {
+  Widget _inputField(
+    String label,
+    TextEditingController controller,
+    ColorScheme scheme, {
+    bool readOnly = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
-        initialValue: value.value,
-        onChanged: (val) => value.value = val,
+        controller: controller,
+        readOnly: readOnly,
         decoration: InputDecoration(
           labelText: label,
           filled: true,
