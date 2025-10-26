@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:ucs/core/constants/app_font.dart';
 import 'package:ucs/features/admin/controllers/admin_settings_controller.dart';
 import 'package:ucs/features/admin/widgets/toggle_tile.dart';
@@ -26,8 +27,7 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
                     _inputField("Phone Number", controller.phone, scheme),
                     const Divider(height: 24),
                     ElevatedButton.icon(
-                      onPressed: () =>
-                          _showChangePasswordDialog(context, scheme),
+                      onPressed: () => controller.resetMyPassword(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue.shade50,
                         foregroundColor: scheme.primary,
@@ -43,9 +43,48 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
                   ]),
 
                   _settingsCard(context, "School Information", [
+                    // Logo preview
+                    Obx(() {
+                      final url = controller.logoUrl.value;
+                      if (url.isEmpty) return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            url,
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) =>
+                                const SizedBox.shrink(),
+                          ),
+                        ),
+                      );
+                    }),
                     _inputField("School Name", controller.schoolName, scheme),
+                    _inputField("Session", controller.session, scheme),
+                    _inputField("Semester", controller.semester, scheme),
+                    _dateField(
+                      context,
+                      label: 'Clearance Deadline',
+                      dateRx: controller.clearanceDeadline,
+                      onPick: () => controller.pickDeadline(context),
+                      scheme: scheme,
+                    ),
+                    const SizedBox(height: 4),
+                    _inputField(
+                      "Contact Email",
+                      controller.contactEmail,
+                      scheme,
+                    ),
+                    _inputField(
+                      "Contact Phone",
+                      controller.contactPhone,
+                      scheme,
+                    ),
                     OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: controller.pickAndUploadLogo,
                       icon: Icon(Icons.upload_outlined, color: scheme.primary),
                       label: Text(
                         "Upload School Logo",
@@ -68,27 +107,6 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
                           "Automatically approve when all documents are uploaded",
                       value: controller.autoApprove,
                     ),
-                    _switchTile(
-                      "Dark Mode",
-                      "Switch to dark theme",
-                      controller.darkMode.value,
-                      (val) => controller.darkMode.value = val,
-                      scheme,
-                    ),
-                    _switchTile(
-                      "Email Notifications",
-                      "Receive notifications via email",
-                      controller.emailNotif.value,
-                      (val) => controller.emailNotif.value = val,
-                      scheme,
-                    ),
-                    _switchTile(
-                      "In-App Notifications",
-                      "Show notifications within the app",
-                      controller.inAppNotif.value,
-                      (val) => controller.inAppNotif.value = val,
-                      scheme,
-                    ),
                   ]),
 
                   _settingsCard(context, "App Info & Help", [
@@ -101,9 +119,11 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
                       onTap: () {},
                     ),
                     const Divider(height: 0),
-                    const ListTile(
-                      title: Text("Version"),
-                      trailing: Text("1.2.3"),
+                    Obx(
+                      () => ListTile(
+                        title: const Text("Version"),
+                        trailing: Text(controller.appVersion.value),
+                      ),
                     ),
                   ]),
 
@@ -218,58 +238,44 @@ class AdminSettingsView extends GetView<AdminSettingsController> {
     );
   }
 
-  Widget _switchTile(
-    String title,
-    String subtitle,
-    bool value,
-    Function(bool) onChanged,
-    ColorScheme scheme,
-  ) {
-    return SwitchListTile(
-      value: value,
-      onChanged: onChanged,
-      title: Text(title, style: AppFont.bodyMedium),
-      subtitle: Text(subtitle, style: AppFont.bodySmall),
-      activeTrackColor: scheme.primary.withOpacity(0.3),
-      activeThumbColor: scheme.primary,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    );
-  }
-
-  void _showChangePasswordDialog(BuildContext context, ColorScheme scheme) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text("Change Password"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: const [
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(labelText: "Current Password"),
-            ),
-            SizedBox(height: 8),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(labelText: "New Password"),
-            ),
-            SizedBox(height: 8),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(labelText: "Confirm New Password"),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text("Cancel")),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(backgroundColor: scheme.primary),
-            child: const Text("Save Password"),
+  Widget _dateField(
+    BuildContext context, {
+    required String label,
+    required Rxn<DateTime> dateRx,
+    required VoidCallback onPick,
+    required ColorScheme scheme,
+  }) {
+    final formatted = Obx(() {
+      final d = dateRx.value;
+      final text = d == null ? '' : DateFormat.yMMMMd().format(d);
+      return TextFormField(
+        readOnly: true,
+        onTap: onPick,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: 'Tap to pick a date',
+          suffixIcon: const Icon(Icons.calendar_today),
+          filled: true,
+          fillColor: Colors.grey[50],
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
           ),
-        ],
-      ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: scheme.primary, width: 1.2),
+          ),
+        ),
+        controller: TextEditingController(text: text),
+      );
+    });
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: formatted,
     );
   }
 }

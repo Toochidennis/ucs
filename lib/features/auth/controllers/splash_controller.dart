@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ucs/core/routes/app_routes.dart';
 import 'package:ucs/data/models/login.dart';
+import 'package:ucs/features/auth/controllers/auth_controller.dart';
 
 class SplashController extends GetxController {
   @override
@@ -18,6 +19,11 @@ class SplashController extends GetxController {
 
     if (data != null) {
       final user = Login.fromJson(Map<String, dynamic>.from(data));
+
+      // Hydrate AuthController if available
+      if (Get.isRegistered<AuthController>()) {
+        Get.find<AuthController>().currentUser.value = user;
+      }
 
       if (user.isAdmin) {
         Get.offAllNamed(AppRoutes.adminDashboard);
