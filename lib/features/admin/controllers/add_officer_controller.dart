@@ -24,6 +24,8 @@ class AddOfficerController extends GetxController {
   final showPassword = false.obs;
 
   final units = <ClearanceUnit>[].obs;
+  // Track if any officer was added in this session; used to refresh list on return
+  final addedAny = false.obs;
 
   @override
   void onInit() {
@@ -92,6 +94,8 @@ class AddOfficerController extends GetxController {
 
       // Stay on this page and clear the form for a new entry
       clearForm();
+      // Mark that at least one officer was added
+      addedAny.value = true;
     } catch (e) {
       Get.back(); // close loading
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/constants/app_color.dart';
+import 'package:bcrypt/bcrypt.dart';
+import 'package:ucs/data/models/enums.dart';
 import 'package:ucs/data/models/student.dart';
 import 'package:ucs/data/repositories/student_repository.dart';
 
@@ -56,5 +58,22 @@ class StudentService {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
+  }
+
+  Future<List<Student>> getStudents() async {
+    return await _repo.getStudents();
+  }
+
+  Future<void> resetStudentPassword(String id, String newPassword) async {
+    final hash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+    await _repo.updateStudent(id, {'password': hash});
+  }
+
+  Future<void> removeStudent(String id) async {
+    await _repo.deleteStudent(id);
+  }
+
+  Future<void> updateStudentStatus(String id, StudentStatus status) async {
+    await _repo.updateStudent(id, {'status': status.value});
   }
 }

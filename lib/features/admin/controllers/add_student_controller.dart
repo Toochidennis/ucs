@@ -24,6 +24,7 @@ class AddStudentController extends GetxController {
   final gender = "Male".obs;
   final studentStatus = "Pending".obs;
   final showPassword = false.obs;
+  final addedAny = false.obs;
 
   final _uuid = const Uuid();
 
@@ -115,26 +116,65 @@ class AddStudentController extends GetxController {
   Future<void> submitForm() async {
     if (!formKey.currentState!.validate()) return;
 
-    final hashedPassword = BCrypt.hashpw(password.text, BCrypt.gensalt());
+    try {
+      final hashedPassword = BCrypt.hashpw(password.text, BCrypt.gensalt());
 
-    final student = Student(
-      id: _uuid.v4(),
-      matricNo: matricNo.text,
-      password: hashedPassword,
-      firstName: firstName.text,
-      middleName: middleName.text.isEmpty ? null : middleName.text,
-      lastName: lastName.text,
-      email: email.text.isEmpty ? null : email.text,
-      phoneNumber: phone.text.isEmpty ? null : phone.text,
-      dob: dob.text.isEmpty ? null : DateTime.tryParse(dob.text),
-      gender: GenderExtension.fromString(gender.value),
-      faculty: faculty.value,
-      department: department.value,
-      level: level.value,
-      status: StudentStatusExtension.fromString(studentStatus.value),
-      createdAt: DateTime.now(),
-    );
+      final student = Student(
+        id: _uuid.v4(),
+        matricNo: matricNo.text,
+        password: hashedPassword,
+        firstName: firstName.text,
+        middleName: middleName.text.isEmpty ? null : middleName.text,
+        lastName: lastName.text,
+        email: email.text.isEmpty ? null : email.text,
+        phoneNumber: phone.text.isEmpty ? null : phone.text,
+        dob: dob.text.isEmpty ? null : DateTime.tryParse(dob.text),
+        gender: GenderExtension.fromString(gender.value),
+        faculty: faculty.value,
+        department: department.value,
+        level: level.value,
+        status: StudentStatusExtension.fromString(studentStatus.value),
+        createdAt: DateTime.now(),
+      );
 
-    await StudentService().addStudent(student);
+      await StudentService().addStudent(student);
+      // Allow overlay/snackbars from service to settle, then clear form
+      await Future.delayed(const Duration(milliseconds: 100));
+      addedAny.value = true;
+      clearForm();
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Unable to add student. Please try again.",
+        backgroundColor: Colors.red[50],
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  void clearForm() {
+    // Unfocus any active input
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    // Clear text controllers
+    firstName.clear();
+    middleName.clear();
+    lastName.clear();
+    email.clear();
+    phone.clear();
+    dob.clear();
+    matricNo.clear();
+    password.clear();
+
+    // Reset selections/toggles
+    faculty.value = "";
+    department.value = "";
+    level.value = "400L";
+    gender.value = "Male";
+    studentStatus.value = "Pending";
+    showPassword.value = false;
+
+    // Reset Form state
+    formKey.currentState?.reset();
   }
 }

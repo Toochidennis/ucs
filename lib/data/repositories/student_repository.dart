@@ -40,4 +40,25 @@ class StudentRepository {
       throw Exception('Error checking existing student: $e');
     }
   }
+
+  Future<void> updateStudent(String id, Map<String, dynamic> updates) async {
+    try {
+      updates.removeWhere((k, v) => v == null);
+      await _client.from(_table).update(updates).eq('id', id);
+    } on PostgrestException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception('Failed to update student: $e');
+    }
+  }
+
+  Future<void> deleteStudent(String id) async {
+    try {
+      await _client.from(_table).delete().eq('id', id);
+    } on PostgrestException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception('Failed to delete student: $e');
+    }
+  }
 }

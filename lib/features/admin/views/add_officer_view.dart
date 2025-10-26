@@ -16,7 +16,7 @@ class AddOfficerView extends GetView<AddOfficerController> {
         title: const Text("Add New Officer"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
+          onPressed: () => Get.back(result: controller.addedAny.value),
         ),
         actions: [
           Padding(

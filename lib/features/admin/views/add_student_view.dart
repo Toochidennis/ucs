@@ -14,7 +14,7 @@ class AddStudentView extends GetView<AddStudentController> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
+          onPressed: () => Get.back(result: controller.addedAny.value),
         ),
         title: Text("Add New Student", style: AppFont.titleMedium),
         actions: [

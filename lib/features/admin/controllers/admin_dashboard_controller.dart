@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/routes/app_routes.dart';
+import 'package:ucs/features/admin/controllers/admin_student_controller.dart';
+import 'package:ucs/features/admin/controllers/admin_officer_controller.dart';
 
 class AdminDashboardController extends GetxController {
- // DateTime? lastBackPress;
+  // DateTime? lastBackPress;
 
   final currentTab = 0.obs;
   var appBarTitle = 'Dashboard'.obs;
@@ -24,7 +26,13 @@ class AdminDashboardController extends GetxController {
         appBarActions.value = [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => Get.toNamed(AppRoutes.addStudent),
+            onPressed: () async {
+              final res = await Get.toNamed(AppRoutes.addStudent);
+              if (res == true && Get.isRegistered<AdminStudentController>()) {
+                // Refresh the students list on return if any were added
+                Get.find<AdminStudentController>().fetchStudents();
+              }
+            },
           ),
         ];
         break;
@@ -34,7 +42,12 @@ class AdminDashboardController extends GetxController {
         appBarActions.value = [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => Get.toNamed(AppRoutes.addOfficer),
+            onPressed: () async {
+              final res = await Get.toNamed(AppRoutes.addOfficer);
+              if (res == true && Get.isRegistered<AdminOfficerController>()) {
+                Get.find<AdminOfficerController>().loadOfficers();
+              }
+            },
           ),
         ];
         break;
