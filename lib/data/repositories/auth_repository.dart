@@ -1,4 +1,5 @@
 import 'package:bcrypt/bcrypt.dart';
+import 'package:flutter/widgets.dart';
 import 'package:ucs/data/models/enums.dart';
 import 'package:ucs/data/models/login.dart';
 import 'package:ucs/data/models/officer.dart';
@@ -10,14 +11,17 @@ class AuthRepository {
     required String identifier,
     required String password,
   }) async {
+    debugPrint('Attempting login for identifier: $identifier');
     // Try officer login first
     final officerMap = await SupabaseService.table('officers')
         .select()
         .or('email.eq."$identifier",officer_id.eq."$identifier"')
         .limit(1)
-        .single();
+        .maybeSingle();
 
-    if (officerMap.isNotEmpty) {
+    debugPrint('Officer Map: $officerMap');
+
+    if (officerMap != null && officerMap.isNotEmpty) {
       final officer = Officer.fromJson(officerMap);
       if (_checkPassword(password, officer.password)) {
         final userRole = officer.role == UserRole.admin
@@ -36,11 +40,13 @@ class AuthRepository {
     // Try student login
     final studentMap = await SupabaseService.table('students')
         .select()
-        .or('matric_no.eq.$identifier,email.eq.$identifier')
+        .or('matric_no.eq."$identifier",email.eq."$identifier"')
         .limit(1)
-        .single();
+        .maybeSingle();
 
-    if (studentMap.isNotEmpty) {
+    debugPrint('Student Map: $studentMap');
+
+    if (studentMap != null && studentMap.isNotEmpty) {
       final student = Student.fromJson(studentMap);
       final valid =
           _checkPassword(password, student.password) ||

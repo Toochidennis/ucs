@@ -65,7 +65,7 @@ class StudentService {
   }
 
   Future<void> resetStudentPassword(String id, String newPassword) async {
-    final hash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+    final hash = BCrypt.hashpw(newPassword.trim(), BCrypt.gensalt());
     await _repo.updateStudent(id, {'password': hash});
   }
 

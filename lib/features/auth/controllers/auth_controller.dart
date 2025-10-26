@@ -52,6 +52,14 @@ class AuthController extends GetxController {
         final box = GetStorage();
         box.write('user', user.toJson());
 
+        // Reset form state after successful login
+        idCtrl.clear();
+        passwordCtrl.clear();
+        idError.value = null;
+        passwordError.value = null;
+        hidePassword.value = true;
+        FocusManager.instance.primaryFocus?.unfocus();
+
         // Navigate based on role
         if (user.isAdmin) {
           Get.offAllNamed(AppRoutes.adminDashboard);
@@ -86,7 +94,9 @@ class AuthController extends GetxController {
       return 'Network error. Please check your connection.';
     } else if (message.contains('unauthorized') ||
         message.contains('invalid') ||
-        message.contains('401')) {
+        message.contains('401') ||
+        message.contains('pgrst116') ||
+        message.contains('0 rows')) {
       return 'Invalid credentials. Try again.';
     } else if (message.contains('500') || message.contains('server')) {
       return 'Server error. Please try again later.';

@@ -11,7 +11,7 @@ import 'package:ucs/features/auth/views/login_view.dart';
 import 'package:ucs/features/auth/views/splash_view.dart';
 import 'package:ucs/features/officer/bindings/officer_binding.dart';
 import 'package:ucs/features/officer/views/officer_dashboard_view.dart';
-import 'package:ucs/features/student/bindings/student_binding.dart';
+import 'package:ucs/features/student/bindings/student_dashboard_binding.dart';
 import 'package:ucs/features/student/views/student_dashboard_view.dart';
 import 'app_routes.dart';
 

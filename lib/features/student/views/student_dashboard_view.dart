@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ucs/features/student/controllers/student_controller.dart';
+import 'package:ucs/features/student/controllers/student_dashboard_controller.dart';
 import 'package:ucs/features/student/views/clearance_detail_view.dart';
 import 'package:ucs/features/student/views/student_home_view.dart';
 import 'package:ucs/features/student/views/student_profile_view.dart';
 import 'package:ucs/shared/views/notifications_view.dart';
 import 'package:ucs/core/constants/app_font.dart';
 
-class StudentDashboardView extends GetView<StudentController> {
+class StudentDashboardView extends GetView<StudentDashboardController> {
   const StudentDashboardView({super.key});
 
   @override

@@ -50,6 +50,8 @@ class AdminHomeView extends GetView<AdminHomeController> {
                             title: "Students",
                             value: controller.totalStudents.value.toString(),
                             color: scheme.primary,
+                            containerColor: scheme.primaryContainer,
+                            onContainerColor: scheme.onPrimaryContainer,
                             trend: controller.studentsTrendUp.value ? "↑" : "↓",
                           ),
                           _buildCompactStat(
@@ -57,6 +59,8 @@ class AdminHomeView extends GetView<AdminHomeController> {
                             title: "Completed",
                             value: controller.totalCleared.value.toString(),
                             color: scheme.secondary,
+                            containerColor: scheme.secondaryContainer,
+                            onContainerColor: scheme.onSecondaryContainer,
                             trend: controller.clearedTrendUp.value ? "↑" : "↓",
                           ),
                           _buildCompactStat(
@@ -64,6 +68,8 @@ class AdminHomeView extends GetView<AdminHomeController> {
                             title: "Pending",
                             value: controller.totalPending.value.toString(),
                             color: scheme.tertiary,
+                            containerColor: scheme.tertiaryContainer,
+                            onContainerColor: scheme.onTertiaryContainer,
                             trend: controller.pendingTrendUp.value ? "↑" : "↓",
                           ),
                           _buildCompactStat(
@@ -71,6 +77,12 @@ class AdminHomeView extends GetView<AdminHomeController> {
                             title: "Officers",
                             value: controller.totalOfficers.value.toString(),
                             color: scheme.primary,
+                            containerColor: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHighest,
+                            onContainerColor: Theme.of(
+                              context,
+                            ).colorScheme.onSurface,
                             trend: controller.officersTrendUp.value ? "↑" : "↓",
                           ),
                         ],
@@ -241,12 +253,15 @@ class AdminHomeView extends GetView<AdminHomeController> {
     required String value,
     required Color color,
     required String trend,
+    Color? containerColor,
+    Color? onContainerColor,
   }) {
+    final scheme = Theme.of(Get.context!).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: Theme.of(Get.context!).colorScheme.surface,
+        color: containerColor ?? scheme.surface,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
@@ -260,8 +275,8 @@ class AdminHomeView extends GetView<AdminHomeController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
-            backgroundColor: color.withOpacity(0.12),
-            child: Icon(icon, color: color),
+            backgroundColor: (onContainerColor ?? color).withOpacity(0.14),
+            child: Icon(icon, color: onContainerColor ?? color),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -274,12 +289,16 @@ class AdminHomeView extends GetView<AdminHomeController> {
                       value,
                       style: AppFont.bodyLarge.copyWith(
                         fontWeight: FontWeight.bold,
+                        color: onContainerColor ?? scheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       title,
-                      style: AppFont.caption,
+                      style: AppFont.caption.copyWith(
+                        color: (onContainerColor ?? scheme.onSurface)
+                            .withOpacity(0.9),
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -290,7 +309,7 @@ class AdminHomeView extends GetView<AdminHomeController> {
                   child: Text(
                     trend,
                     style: AppFont.caption.copyWith(
-                      color: color,
+                      color: onContainerColor ?? color,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

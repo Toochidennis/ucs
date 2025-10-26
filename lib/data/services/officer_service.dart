@@ -27,14 +27,14 @@ class OfficerService {
 
     final officer = Officer(
       id: const Uuid().v4(),
-      name: name,
-      email: email,
-      phoneNumber: phone,
+      name: name.trim(),
+      email: email?.trim(),
+      phoneNumber: phone?.trim(),
       unitId: unitId,
-      officerId: officerId,
+      officerId: officerId.trim(),
       gender: gender,
       role: role,
-      password: BCrypt.hashpw(password, BCrypt.gensalt()),
+      password: BCrypt.hashpw(password.trim(), BCrypt.gensalt()),
       canReview: canReview,
       createdAt: DateTime.now(),
     );
@@ -45,7 +45,7 @@ class OfficerService {
   Future<List<Officer>> fetchAllOfficers() => _repo.fetchAllOfficers();
 
   Future<void> resetOfficerPassword(String id, String newPassword) async {
-    final hash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+    final hash = BCrypt.hashpw(newPassword.trim(), BCrypt.gensalt());
     await _repo.updateOfficer(id, {'password': hash});
   }
 

@@ -117,17 +117,20 @@ class AddStudentController extends GetxController {
     if (!formKey.currentState!.validate()) return;
 
     try {
-      final hashedPassword = BCrypt.hashpw(password.text, BCrypt.gensalt());
+      final rawPassword = password.text.trim();
+      final hashedPassword = BCrypt.hashpw(rawPassword, BCrypt.gensalt());
 
       final student = Student(
         id: _uuid.v4(),
-        matricNo: matricNo.text,
+        matricNo: matricNo.text.trim(),
         password: hashedPassword,
-        firstName: firstName.text,
-        middleName: middleName.text.isEmpty ? null : middleName.text,
-        lastName: lastName.text,
-        email: email.text.isEmpty ? null : email.text,
-        phoneNumber: phone.text.isEmpty ? null : phone.text,
+        firstName: firstName.text.trim(),
+        middleName: middleName.text.trim().isEmpty
+            ? null
+            : middleName.text.trim(),
+        lastName: lastName.text.trim(),
+        email: email.text.trim().isEmpty ? null : email.text.trim(),
+        phoneNumber: phone.text.trim().isEmpty ? null : phone.text.trim(),
         dob: dob.text.isEmpty ? null : DateTime.tryParse(dob.text),
         gender: GenderExtension.fromString(gender.value),
         faculty: faculty.value,

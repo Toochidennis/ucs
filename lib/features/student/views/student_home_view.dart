@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/constants/app_font.dart';
-import '../controllers/student_controller.dart';
+import '../controllers/student_home_controller.dart';
 
-class StudentHomeView extends GetView<StudentController> {
+class StudentHomeView extends GetView<StudentHomeController> {
   const StudentHomeView({super.key});
 
   @override
