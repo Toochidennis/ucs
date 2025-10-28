@@ -269,10 +269,12 @@ class AdminStudentsView extends GetView<AdminStudentController> {
                               final current = (s['status'] ?? 'pending')
                                   .toLowerCase();
                               StudentStatus selected = StudentStatus.pending;
-                              if (current == 'cleared')
+                              if (current == 'cleared') {
                                 selected = StudentStatus.cleared;
-                              if (current == 'suspended')
+                              }
+                              if (current == 'suspended') {
                                 selected = StudentStatus.suspended;
+                              }
 
                               await showModalBottomSheet(
                                 context: context,
