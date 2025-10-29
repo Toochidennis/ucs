@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/constants/app_font.dart';
-import 'package:ucs/features/student/controllers/clearance_unit_controller.dart';
+import 'package:ucs/features/student/controllers/clearance_process_controller.dart';
 
-class ClearanceUnitView extends GetView<ClearanceUnitController> {
-  const ClearanceUnitView({super.key});
+class ClearanceProcessView extends GetView<ClearanceProcessController> {
+  const ClearanceProcessView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +34,6 @@ class ClearanceUnitView extends GetView<ClearanceUnitController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Clearance Process',
-                        style: AppFont.titleLarge.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
                       Text(
                         'Complete each unit in order to proceed',
                         style: AppFont.bodyMedium.copyWith(

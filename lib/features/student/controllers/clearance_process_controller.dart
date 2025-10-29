@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ucs/data/models/login.dart';
 import 'package:ucs/data/services/student_home_service.dart';
 
-class ClearanceUnitController extends GetxController {
+class ClearanceProcessController extends GetxController {
   final _service = StudentHomeService();
   final _storage = GetStorage();
 

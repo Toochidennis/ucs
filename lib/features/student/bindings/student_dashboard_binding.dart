@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:ucs/features/student/controllers/clearance_unit_controller.dart';
+import 'package:ucs/features/student/controllers/clearance_process_controller.dart';
 import 'package:ucs/features/student/controllers/student_dashboard_controller.dart';
 import 'package:ucs/features/student/controllers/student_home_controller.dart';
 import 'package:ucs/features/student/controllers/student_notification_controller.dart';
@@ -10,7 +10,7 @@ class StudentBinding extends Bindings {
   void dependencies() {
     Get.put(StudentDashboardController(), permanent: true);
     Get.lazyPut(() => StudentHomeController(), fenix: true);
-    Get.lazyPut(() => ClearanceUnitController(), fenix: true);
+    Get.lazyPut(() => ClearanceProcessController(), fenix: true);
     Get.lazyPut(() => StudentProfileController(), fenix: true);
     Get.lazyPut(() => StudentNotificationController(), fenix: true);
   }

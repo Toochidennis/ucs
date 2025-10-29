@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucs/features/student/controllers/student_dashboard_controller.dart';
-import 'package:ucs/features/student/views/clearance_unit_view.dart';
+import 'package:ucs/features/student/views/clearance_process_view.dart';
 import 'package:ucs/features/student/views/student_home_view.dart';
 import 'package:ucs/features/student/views/student_notification_view.dart';
 import 'package:ucs/features/student/views/student_profile_view.dart';
@@ -29,7 +29,7 @@ class StudentDashboardView extends GetView<StudentDashboardController> {
               index: controller.currentTab.value,
               children: const [
                 StudentHomeView(),
-                ClearanceUnitView(),
+                ClearanceProcessView(),
                 StudentNotificationView(),
                 StudentProfileView(),
               ],
