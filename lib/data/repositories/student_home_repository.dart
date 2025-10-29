@@ -22,18 +22,40 @@ class StudentHomeRepository {
     }
   }
 
-  /// Get count of cleared units for a student
-  /// A unit is considered cleared when all its requirements are approved
-  Future<int> getClearedUnitsCount(String studentId) async {
+  /// Get optimized clearance counts for a student (cleared and uncleared)
+  /// Returns a map with both counts in a single optimized query
+  Future<Map<String, int>> getClearanceCounts(String studentId) async {
     try {
-      // Get all units
+      // Get all units with their requirements in one query
       final unitsResponse = await _client
           .from('clearance_units')
           .select('id, clearance_requirements(id)');
 
-      int clearedCount = 0;
+      final units = unitsResponse as List;
+      final totalUnits = units.length;
 
-      for (final unitData in unitsResponse as List) {
+      if (units.isEmpty) {
+        return {'cleared': 0, 'uncleared': 0};
+      }
+
+      // Get all documents for this student in ONE query
+      final allDocs = await _client
+          .from('clearance_documents')
+          .select('unit_id, requirement_id, status')
+          .eq('student_id', studentId)
+          .eq('status', 'approved');
+
+      // Group documents by unit_id for quick lookup
+      final docsByUnit = <String, Set<String>>{};
+      for (final doc in allDocs as List) {
+        final unitId = doc['unit_id'] as String;
+        final reqId = doc['requirement_id'] as String;
+        docsByUnit.putIfAbsent(unitId, () => <String>{}).add(reqId);
+      }
+
+      // Count cleared units
+      int clearedCount = 0;
+      for (final unitData in units) {
         final unitId = unitData['id'] as String;
         final requirements = unitData['clearance_requirements'] as List?;
 
@@ -41,73 +63,68 @@ class StudentHomeRepository {
           continue;
         }
 
-        // Get all requirement IDs for this unit
         final requirementIds = requirements
             .map((r) => r['id'] as String)
-            .toList();
+            .toSet();
 
-        // Check if all requirements have approved documents
-        final approvedDocs = await _client
-            .from('clearance_documents')
-            .select('requirement_id')
-            .eq('student_id', studentId)
-            .eq('unit_id', unitId)
-            .eq('status', 'approved')
-            .inFilter('requirement_id', requirementIds);
+        final approvedReqs = docsByUnit[unitId] ?? <String>{};
 
-        // If all requirements have approved documents, count as cleared
-        if (approvedDocs.length == requirementIds.length) {
+        // Check if all requirements are approved
+        if (approvedReqs.containsAll(requirementIds)) {
           clearedCount++;
         }
       }
 
-      return clearedCount;
+      return {'cleared': clearedCount, 'uncleared': totalUnits - clearedCount};
     } on PostgrestException catch (e) {
-      throw Exception('Failed to get cleared units count: ${e.message}');
+      throw Exception('Failed to get clearance counts: ${e.message}');
     } catch (e) {
-      throw Exception('Failed to get cleared units count: $e');
+      throw Exception('Failed to get clearance counts: $e');
     }
   }
 
-  /// Get count of uncleared (pending) units for a student
-  Future<int> getUnclearedUnitsCount(String studentId) async {
-    try {
-      // Get total units count
-      final totalUnitsResponse = await _client
-          .from('clearance_units')
-          .select('id');
-      final totalUnits = (totalUnitsResponse as List).length;
-
-      // Get cleared units count
-      final clearedUnits = await getClearedUnitsCount(studentId);
-
-      return totalUnits - clearedUnits;
-    } catch (e) {
-      throw Exception('Failed to get uncleared units count: $e');
-    }
-  }
-
-  /// Get clearance progress for each unit
+  /// Get count of cleared units for a student
+  /// Get clearance progress for each unit - OPTIMIZED VERSION
   /// Returns a list of maps with unit details and their status
+  /// Uses only 2 queries instead of N+1 queries
   Future<List<Map<String, dynamic>>> getClearanceProgress(
     String studentId,
   ) async {
     try {
-      // Get all units with their requirements
+      // QUERY 1: Get all units with their requirements
       final unitsResponse = await _client
           .from('clearance_units')
           .select('id, unit_name, position, clearance_requirements(id)')
           .order('position', ascending: true);
 
+      final units = unitsResponse as List;
+
+      if (units.isEmpty) {
+        return [];
+      }
+
+      // QUERY 2: Get ALL documents for this student in ONE query
+      final allDocs = await _client
+          .from('clearance_documents')
+          .select('unit_id, requirement_id, status')
+          .eq('student_id', studentId);
+
+      // Group documents by unit_id for quick lookup
+      final docsByUnit = <String, List<Map<String, dynamic>>>{};
+      for (final doc in allDocs as List) {
+        final unitId = doc['unit_id'] as String;
+        docsByUnit.putIfAbsent(unitId, () => []).add(doc);
+      }
+
+      // Build progress list
       final progressList = <Map<String, dynamic>>[];
 
-      for (final unitData in unitsResponse as List) {
+      for (final unitData in units) {
         final unitId = unitData['id'] as String;
         final unitName = unitData['unit_name'] as String;
         final requirements = unitData['clearance_requirements'] as List?;
 
         if (requirements == null || requirements.isEmpty) {
-          // No requirements, mark as not started
           progressList.add({
             'unitId': unitId,
             'unitName': unitName,
@@ -120,18 +137,11 @@ class StudentHomeRepository {
 
         final requirementIds = requirements
             .map((r) => r['id'] as String)
-            .toList();
+            .toSet();
 
-        // Get documents for this unit
-        final docs = await _client
-            .from('clearance_documents')
-            .select('status, requirement_id')
-            .eq('student_id', studentId)
-            .eq('unit_id', unitId)
-            .inFilter('requirement_id', requirementIds);
+        final unitDocs = docsByUnit[unitId] ?? [];
 
-        if (docs.isEmpty) {
-          // No documents submitted
+        if (unitDocs.isEmpty) {
           progressList.add({
             'unitId': unitId,
             'unitName': unitName,
@@ -140,16 +150,15 @@ class StudentHomeRepository {
             'color': 'grey',
           });
         } else {
-          // Check statuses
-          final approvedCount = docs
+          // Count statuses
+          final approvedCount = unitDocs
               .where((d) => d['status'] == 'approved')
               .length;
-          final rejectedCount = docs
+          final rejectedCount = unitDocs
               .where((d) => d['status'] == 'rejected')
               .length;
 
           if (approvedCount == requirementIds.length) {
-            // All approved
             progressList.add({
               'unitId': unitId,
               'unitName': unitName,
@@ -158,7 +167,6 @@ class StudentHomeRepository {
               'color': 'green',
             });
           } else if (rejectedCount > 0) {
-            // At least one rejected
             progressList.add({
               'unitId': unitId,
               'unitName': unitName,
@@ -167,7 +175,6 @@ class StudentHomeRepository {
               'color': 'red',
             });
           } else {
-            // Some pending
             progressList.add({
               'unitId': unitId,
               'unitName': unitName,

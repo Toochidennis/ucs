@@ -91,7 +91,8 @@ class StudentHomeController extends GetxController {
     }
   }
 
-  /// Load all home data
+  /// Load all home data - OPTIMIZED VERSION
+  /// Fetches student info and home data in parallel
   Future<void> loadHomeData() async {
     if (studentId.value.isEmpty) {
       _loadStudentIdFromStorage();
@@ -100,11 +101,13 @@ class StudentHomeController extends GetxController {
 
     isLoading.value = true;
     try {
-      // Fetch student info from server first
-      await _fetchStudentInfoFromServer();
+      // Fetch student info and home data IN PARALLEL for faster loading
+      final results = await Future.wait([
+        _fetchStudentInfoFromServer(),
+        _service.getHomeData(studentId.value),
+      ]);
 
-      // Then fetch home data
-      final data = await _service.getHomeData(studentId.value);
+      final data = results[1] as Map<String, dynamic>;
 
       clearedCount.value = data['clearedCount'] as int;
       unclearedCount.value = data['unclearedCount'] as int;

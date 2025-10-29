@@ -43,7 +43,7 @@ class StudentDashboardController extends GetxController {
         break;
 
       case 1:
-        appBarTitle.value = 'Clearance Details';
+        appBarTitle.value = 'Clearance';
         appBarActions.value = [];
         break;
 
