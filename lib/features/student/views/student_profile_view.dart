@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:ucs/core/constants/app_font.dart';
-import '../controllers/student_profile_controller.dart';
+import 'package:ucs/features/student/controllers/student_profile_controller.dart';
 
 class StudentProfileView extends GetView<StudentProfileController> {
   const StudentProfileView({super.key});
@@ -11,139 +12,147 @@ class StudentProfileView extends GetView<StudentProfileController> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: Column(
-          children: [
-            // Header
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
-                border: Border(
-                  bottom: BorderSide(color: theme.dividerColor),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Profile", style: AppFont.titleSmall),
-                  TextButton(
-                    onPressed: () => controller.editProfile(),
-                    child: Text("Edit", style: AppFont.titleMedium),
-                  ),
-                ],
-              ),
+      body: Obx(() {
+        if (controller.isLoading.value && controller.firstName.value.isEmpty) {
+          return Center(
+            child: SpinKitChasingDots(
+              color: theme.colorScheme.primary,
+              size: 50,
             ),
+          );
+        }
 
-            // Profile Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 48,
-                    backgroundColor: theme.colorScheme.primary,
-                    child: Text(
-                      "SJ",
-                      style: AppFont.titleLarge.copyWith(
-                        color: theme.colorScheme.onPrimary,
-                      ),
-                    ),
+        return RefreshIndicator(
+          onRefresh: controller.refreshProfile,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Column(
+              children: [
+                // Profile Header
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
                   ),
-                  const SizedBox(height: 12),
-                  Text("Sarah Johnson", style: AppFont.titleMedium),
-                  const SizedBox(height: 4),
-                  Text("Computer Science Student", style: AppFont.bodyMedium),
-                  const SizedBox(height: 8),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade100,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 8,
-                          height: 8,
-                          margin: const EdgeInsets.only(right: 6),
-                          decoration: const BoxDecoration(
-                            color: Colors.green,
-                            shape: BoxShape.circle,
+                  child: Column(
+                    children: [
+                      Obx(
+                        () => CircleAvatar(
+                          radius: 48,
+                          backgroundColor: theme.colorScheme.primary,
+                          child: Text(
+                            controller.initials,
+                            style: AppFont.titleLarge.copyWith(
+                              color: theme.colorScheme.onPrimary,
+                            ),
                           ),
                         ),
-                        Text("Active", style: AppFont.bodySmall.copyWith(
-                          color: Colors.green.shade700,
-                          fontWeight: FontWeight.w600,
-                        )),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Personal Info
-            _sectionCard(
-              title: "Personal Information",
-              children: [
-                _infoRow("Matric Number", "CS/2020/001"),
-                _infoRow("Email", "sarah.johnson@university.edu"),
-                _infoRow("Phone", "+234 801 234 5678"),
-                _infoRow("Department", "Computer Science"),
-                _infoRow("Level", "400 Level"),
-                _infoRow("Session", "2024/2025"),
-              ],
-            ),
-
-            // Settings
-            _sectionCard(
-              title: "Settings",
-              children: [
-                _toggleRow("Push Notifications", true, Icons.notifications,
-                    Colors.purple, (value) {
-                  controller.togglePushNotifications(value);
-                }),
-                _toggleRow("Email Updates", true, Icons.mail, Colors.orange,
-                    (value) {
-                  controller.toggleEmailUpdates(value);
-                }),
-              ],
-            ),
-
-            // Logout Button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ElevatedButton.icon(
-                onPressed: controller.logout,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red.shade50,
-                  foregroundColor: Colors.red.shade600,
-                  elevation: 0,
-                  minimumSize: const Size.fromHeight(50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: Colors.red.shade200),
+                      ),
+                      const SizedBox(height: 12),
+                      Obx(
+                        () => Text(
+                          controller.fullName,
+                          style: AppFont.titleMedium,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Obx(
+                        () => Text(
+                          '${controller.department.value} Student',
+                          style: AppFont.bodyMedium,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Obx(() {
+                        final colors = controller.getStatusColors(context);
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: colors.$1,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 8,
+                                height: 8,
+                                margin: const EdgeInsets.only(right: 6),
+                                decoration: BoxDecoration(
+                                  color: colors.$2,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              Text(
+                                controller.statusText,
+                                style: AppFont.bodySmall.copyWith(
+                                  color: colors.$2,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
                   ),
                 ),
-                icon: const Icon(Icons.logout),
-                label: const Text("Sign Out"),
-              ),
+
+                // Personal Info
+                Obx(
+                  () => _sectionCard(
+                    title: "Personal Information",
+                    children: [
+                      _infoRow("Matric Number", controller.matricNo.value),
+                      if (controller.email.value.isNotEmpty)
+                        _infoRow("Email", controller.email.value),
+                      if (controller.phoneNumber.value.isNotEmpty)
+                        _infoRow("Phone", controller.phoneNumber.value),
+                      _infoRow("Faculty", controller.faculty.value),
+                      _infoRow("Department", controller.department.value),
+                      _infoRow("Level", controller.level.value),
+                      if (controller.gender.value.isNotEmpty)
+                        _infoRow("Gender", controller.gender.value),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+                // Logout Button
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ElevatedButton.icon(
+                    onPressed: controller.logout,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.errorContainer,
+                      foregroundColor: theme.colorScheme.onErrorContainer,
+                      elevation: 0,
+                      minimumSize: const Size.fromHeight(50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: theme.colorScheme.error.withValues(alpha: 0.3),
+                        ),
+                      ),
+                    ),
+                    icon: const Icon(Icons.logout),
+                    label: const Text("Log Out"),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }),
     );
   }
 
   /// Section Card Wrapper
-  Widget _sectionCard({
-    required String title,
-    required List<Widget> children,
-  }) {
+  Widget _sectionCard({required String title, required List<Widget> children}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Card(
@@ -178,42 +187,6 @@ class StudentProfileView extends GetView<StudentProfileController> {
               textAlign: TextAlign.right,
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  /// Toggle Row
-  Widget _toggleRow(
-    String label,
-    bool value,
-    IconData icon,
-    Color color,
-    Function(bool) onChanged,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: color.withOpacity(0.1),
-                radius: 18,
-                child: Icon(icon, color: color, size: 18),
-              ),
-              const SizedBox(width: 12),
-              Text(label,
-                  style:
-                      AppFont.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
-            ],
-          ),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-            activeThumbColor: Colors.green,
-          )
         ],
       ),
     );

@@ -264,7 +264,10 @@ class StudentHomeRepository {
     try {
       final response = await _client
           .from('students')
-          .select('id, first_name, middle_name, last_name, status')
+          .select(
+            'id, first_name, middle_name, last_name, matric_no, email, '
+            'phone_number, gender, faculty, department, level, status',
+          )
           .eq('id', studentId)
           .single();
 
