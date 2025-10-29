@@ -6,7 +6,7 @@ class AppNotification {
   final String userId;
   final String title;
   final String message;
-  final bool read;
+  final bool isRead;
   final UserRole userType;
   final DateTime? sentAt;
 
@@ -15,7 +15,7 @@ class AppNotification {
     required this.userId,
     required this.title,
     required this.message,
-    required this.read,
+    required this.isRead,
     required this.userType,
     this.sentAt,
   });
@@ -30,7 +30,7 @@ class AppNotification {
       userId: userId,
       title: title,
       message: message,
-      read: false,
+      isRead: false,
       userType: UserRoleExtension.fromString(userType),
       sentAt: DateTime.now(),
     );
@@ -42,7 +42,7 @@ class AppNotification {
         userId: json['user_id'],
         title: json['title'],
         message: json['message'],
-        read: json['read'] ?? false,
+        isRead: json['is_read'] ?? false,
         userType: UserRoleExtension.fromString(json['user_type']),
         sentAt: json['sent_at'] != null
             ? DateTime.parse(json['sent_at'])
@@ -54,7 +54,7 @@ class AppNotification {
         'user_id': userId,
         'title': title,
         'message': message,
-        'read': read,
+        'is_read': isRead,
         'user_type': userType,
         'sent_at': sentAt?.toIso8601String(),
       };
