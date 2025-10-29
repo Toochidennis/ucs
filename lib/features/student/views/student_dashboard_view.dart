@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:ucs/features/student/controllers/student_dashboard_controller.dart';
 import 'package:ucs/features/student/views/clearance_detail_view.dart';
 import 'package:ucs/features/student/views/student_home_view.dart';
+import 'package:ucs/features/student/views/student_notification_view.dart';
 import 'package:ucs/features/student/views/student_profile_view.dart';
-import 'package:ucs/shared/views/notifications_view.dart';
 
 class StudentDashboardView extends GetView<StudentDashboardController> {
   const StudentDashboardView({super.key});
@@ -30,7 +30,7 @@ class StudentDashboardView extends GetView<StudentDashboardController> {
               children: const [
                 StudentHomeView(),
                 ClearanceDetailView(),
-                NotificationsView(),
+                StudentNotificationView(),
                 StudentProfileView(),
               ],
             ),
@@ -40,23 +40,23 @@ class StudentDashboardView extends GetView<StudentDashboardController> {
               currentIndex: controller.currentTab.value,
               onTap: controller.changeTab,
               type: BottomNavigationBarType.fixed,
-              items: const [
-                BottomNavigationBarItem(
+              items: [
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.dashboard_outlined),
                   activeIcon: Icon(Icons.dashboard),
                   label: "Dashboard",
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.article_outlined),
                   activeIcon: Icon(Icons.article),
                   label: "Clearance",
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.notifications_outlined),
-                  activeIcon: Icon(Icons.notifications),
+                  icon: _buildNotificationIcon(false),
+                  activeIcon: _buildNotificationIcon(true),
                   label: "Notifications",
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.person_outline),
                   activeIcon: Icon(Icons.person),
                   label: "Profile",
@@ -67,5 +67,21 @@ class StudentDashboardView extends GetView<StudentDashboardController> {
         );
       }),
     );
+  }
+
+  /// Build notification icon with badge
+  Widget _buildNotificationIcon(bool isActive) {
+    return Obx(() {
+      final count = controller.notificationManager.unreadCount.value;
+      return Badge(
+        label: Text(count > 99 ? '99+' : count.toString()),
+        isLabelVisible: count > 0,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        child: Icon(
+          isActive ? Icons.notifications : Icons.notifications_outlined,
+        ),
+      );
+    });
   }
 }

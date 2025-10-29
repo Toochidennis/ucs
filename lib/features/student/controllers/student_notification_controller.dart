@@ -1,104 +1,202 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-class NotificationItem {
-  final int id;
-  final String title;
-  final String message;
-  final String time;
-  final IconData icon;
-  final Color color;
-  bool isNew;
-  bool isOld;
-
-  NotificationItem({
-    required this.id,
-    required this.title,
-    required this.message,
-    required this.time,
-    required this.icon,
-    required this.color,
-    this.isNew = false,
-    this.isOld = false,
-  });
-}
+import 'package:get_storage/get_storage.dart';
+import 'package:ucs/core/services/notification_manager.dart';
+import 'package:ucs/data/models/login.dart';
+import 'package:ucs/data/services/student_notification_service.dart';
 
 class StudentNotificationController extends GetxController {
-  // Observable list of notifications
-  final RxList<NotificationItem> notifications = <NotificationItem>[].obs;
+  final _service = StudentNotificationService();
+  final _storage = GetStorage();
+
+  final RxList<Map<String, dynamic>> notifications =
+      <Map<String, dynamic>>[].obs;
+  final isLoading = false.obs;
+  final studentId = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    _loadDummyNotifications();
+    _loadStudentIdFromStorage();
+    loadNotifications();
   }
 
-  void _loadDummyNotifications() {
-    notifications.assignAll([
-      NotificationItem(
-        id: 1,
-        title: "Finance Clearance Approved",
-        message:
-            "Your finance clearance has been approved by the finance officer. You can now proceed to the next unit.",
-        time: "15 minutes ago",
-        icon: Icons.check,
-        color: Colors.blue,
-        isNew: true,
-      ),
-      NotificationItem(
-        id: 2,
-        title: "Library Review in Progress",
-        message:
-            "Your library clearance documents are currently being reviewed by Dr. Michael Thompson.",
-        time: "2 hours ago",
-        icon: Icons.access_time,
-        color: Colors.orange,
-      ),
-      NotificationItem(
-        id: 3,
-        title: "Additional Documents Required",
-        message:
-            "The hostel officer has requested additional documentation for your clearance. Please upload the required files.",
-        time: "1 day ago",
-        icon: Icons.description,
-        color: Colors.deepOrange,
-      ),
-      NotificationItem(
-        id: 4,
-        title: "Clearance Deadline Reminder",
-        message:
-            "Reminder: The clearance deadline is March 31, 2025. Please complete all pending clearances before the deadline.",
-        time: "2 days ago",
-        icon: Icons.info_outline,
-        color: Colors.green,
-      ),
-      NotificationItem(
-        id: 5,
-        title: "Welcome to E-Clearance System",
-        message:
-            "Welcome to the university e-clearance system. Start your clearance process by completing your profile information.",
-        time: "1 week ago",
-        icon: Icons.person_add_alt,
-        color: Colors.grey,
-        isOld: true,
-      ),
-    ]);
-  }
-
-  // Mark all as read
-  void markAllRead() {
-    for (var n in notifications) {
-      n.isNew = false;
+  /// Load student ID from persisted data
+  void _loadStudentIdFromStorage() {
+    try {
+      final userData = _storage.read('user');
+      if (userData != null) {
+        final user = Login.fromJson(Map<String, dynamic>.from(userData));
+        studentId.value = user.id;
+      }
+    } catch (e) {
+      // Failed to load student ID
     }
-    notifications.refresh();
   }
 
-  // Mark single notification as read
-  void markAsRead(int id) {
-    final index = notifications.indexWhere((n) => n.id == id);
-    if (index != -1) {
-      notifications[index].isNew = false;
+  /// Load notifications from the database
+  Future<void> loadNotifications() async {
+    if (studentId.value.isEmpty) {
+      _loadStudentIdFromStorage();
+      if (studentId.value.isEmpty) return;
+    }
+
+    isLoading.value = true;
+    try {
+      final notifs = await _service.getNotificationsForStudent(studentId.value);
+
+      // Process notifications and add UI properties
+      final processedNotifs = notifs.map((notif) {
+        return {
+          ...notif,
+          'icon': _getIconForNotification(notif['title']),
+          'color': _getColorForNotification(notif['isRead'], notif['title']),
+          'isNew': !notif['isRead'] && _isRecent(notif['sentAt']),
+          'isOld': _isOld(notif['sentAt']),
+        };
+      }).toList();
+
+      notifications.assignAll(processedNotifs);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to load notifications: $e',
+        backgroundColor: Colors.red[50],
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Mark all notifications as read
+  Future<void> markAllAsRead() async {
+    if (studentId.value.isEmpty) return;
+
+    try {
+      await _service.markAllAsRead(studentId.value);
+
+      // Update local state
+      for (var notif in notifications) {
+        notif['isRead'] = true;
+        notif['isNew'] = false;
+        notif['color'] = Colors.grey;
+      }
       notifications.refresh();
+
+      // Update notification manager count
+      try {
+        final manager = Get.find<NotificationManager>(tag: studentId.value);
+        manager.markAllAsRead();
+      } catch (e) {
+        // Manager not found
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to mark notifications as read',
+        backgroundColor: Colors.red[50],
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
+  }
+
+  /// Mark a single notification as read
+  Future<void> markAsRead(String notificationId) async {
+    try {
+      await _service.markAsRead(notificationId);
+
+      // Update local state
+      final index = notifications.indexWhere((n) => n['id'] == notificationId);
+      if (index != -1) {
+        notifications[index]['isRead'] = true;
+        notifications[index]['isNew'] = false;
+        notifications[index]['color'] = Colors.grey;
+        notifications.refresh();
+      }
+
+      // Update notification manager count
+      try {
+        final manager = Get.find<NotificationManager>(tag: studentId.value);
+        manager.markAsRead(notificationId);
+      } catch (e) {
+        // Manager not found
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to mark notification as read',
+        backgroundColor: Colors.red[50],
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  /// Refresh notifications
+  Future<void> refreshNotifications() async {
+    await loadNotifications();
+  }
+
+  /// Get icon based on notification title/type
+  IconData _getIconForNotification(String title) {
+    final lowerTitle = title.toLowerCase();
+
+    if (lowerTitle.contains('approved')) {
+      return Icons.check_circle;
+    } else if (lowerTitle.contains('rejected')) {
+      return Icons.cancel;
+    } else if (lowerTitle.contains('review') ||
+        lowerTitle.contains('progress')) {
+      return Icons.access_time;
+    } else if (lowerTitle.contains('document') ||
+        lowerTitle.contains('upload')) {
+      return Icons.description;
+    } else if (lowerTitle.contains('deadline') ||
+        lowerTitle.contains('reminder')) {
+      return Icons.info_outline;
+    } else if (lowerTitle.contains('welcome')) {
+      return Icons.person_add_alt;
+    } else {
+      return Icons.notifications;
+    }
+  }
+
+  /// Get color based on read status and notification type
+  Color _getColorForNotification(bool isRead, String title) {
+    if (isRead) {
+      return Colors.grey;
+    }
+
+    final lowerTitle = title.toLowerCase();
+
+    if (lowerTitle.contains('approved')) {
+      return Colors.green;
+    } else if (lowerTitle.contains('rejected')) {
+      return Colors.red;
+    } else if (lowerTitle.contains('review') ||
+        lowerTitle.contains('progress')) {
+      return Colors.orange;
+    } else if (lowerTitle.contains('document') ||
+        lowerTitle.contains('upload')) {
+      return Colors.deepOrange;
+    } else if (lowerTitle.contains('deadline')) {
+      return Colors.amber;
+    } else {
+      return Colors.blue;
+    }
+  }
+
+  /// Check if notification is recent (within last hour)
+  bool _isRecent(DateTime? sentAt) {
+    if (sentAt == null) return false;
+    final difference = DateTime.now().difference(sentAt);
+    return difference.inHours < 1;
+  }
+
+  /// Check if notification is old (more than 7 days)
+  bool _isOld(DateTime? sentAt) {
+    if (sentAt == null) return false;
+    final difference = DateTime.now().difference(sentAt);
+    return difference.inDays > 7;
   }
 }

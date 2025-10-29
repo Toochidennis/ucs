@@ -24,9 +24,7 @@ class NotificationRepository {
           .eq('user_id', userId)
           .order('sent_at', ascending: false);
 
-      return (res as List)
-          .map((e) => AppNotification.fromJson(e))
-          .toList();
+      return (res as List).map((e) => AppNotification.fromJson(e)).toList();
     } on PostgrestException catch (e) {
       throw Exception('Failed to fetch notifications: ${e.message}');
     }
@@ -37,9 +35,9 @@ class NotificationRepository {
     try {
       await _client
           .from(_notifTable)
-          .update({'read': true})
+          .update({'is_read': true})
           .eq('user_id', userId)
-          .eq('read', false);
+          .eq('is_read', false);
     } on PostgrestException catch (e) {
       throw Exception('Failed to update notifications: ${e.message}');
     }
@@ -52,9 +50,7 @@ class NotificationRepository {
           .select('fcm_token')
           .eq('user_id', userId);
 
-      return (result as List)
-          .map((e) => e['fcm_token'].toString())
-          .toList();
+      return (result as List).map((e) => e['fcm_token'].toString()).toList();
     } on PostgrestException catch (e) {
       throw Exception('Failed to get user FCM tokens: ${e.message}');
     }
