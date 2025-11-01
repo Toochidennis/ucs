@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OfficerController extends GetxController {
+class OfficerHomeController extends GetxController {
   // Tabs
   var currentTab = 0.obs;
   var showDetail = false.obs;

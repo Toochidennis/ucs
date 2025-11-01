@@ -51,7 +51,8 @@ class _PdfPreviewViewState extends State<PdfPreviewView> {
           IconButton(
             icon: const Icon(Icons.zoom_in),
             onPressed: () {
-              _pdfViewerController.zoomLevel = _pdfViewerController.zoomLevel + 0.25;
+              _pdfViewerController.zoomLevel =
+                  _pdfViewerController.zoomLevel + 0.25;
             },
           ),
         ],
@@ -96,9 +97,7 @@ class _PdfPreviewViewState extends State<PdfPreviewView> {
           if (isLoading)
             Container(
               color: Colors.black.withOpacity(0.1),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
         ],
       ),
@@ -109,7 +108,8 @@ class _PdfPreviewViewState extends State<PdfPreviewView> {
             heroTag: 'zoom_out',
             mini: true,
             onPressed: () {
-              _pdfViewerController.zoomLevel = _pdfViewerController.zoomLevel - 0.25;
+              _pdfViewerController.zoomLevel =
+                  _pdfViewerController.zoomLevel - 0.25;
             },
             child: const Icon(Icons.zoom_out),
           ),

@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ucs/data/models/enums.dart';
 import 'package:ucs/data/models/login.dart';
 import 'package:ucs/data/services/student_home_service.dart';
+import 'package:ucs/features/auth/controllers/auth_controller.dart';
 
 class StudentProfileController extends GetxController {
   final _storage = GetStorage();
@@ -201,6 +202,6 @@ class StudentProfileController extends GetxController {
 
   /// Handle logout
   void logout() {
-    Get.offAllNamed('/auth/login');
+    Get.find<AuthController>().logout();
   }
 }
