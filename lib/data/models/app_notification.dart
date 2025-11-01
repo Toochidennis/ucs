@@ -50,12 +50,12 @@ class AppNotification {
       );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'user_id': userId,
-        'title': title,
-        'message': message,
-        'is_read': isRead,
-        'user_type': userType,
-        'sent_at': sentAt?.toIso8601String(),
-      };
+    'id': id,
+    'user_id': userId,
+    'title': title,
+    'message': message,
+    'is_read': isRead,
+    'user_type': userType,
+    'sent_at': sentAt?.toIso8601String(),
+  };
 }

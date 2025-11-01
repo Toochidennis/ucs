@@ -2,10 +2,9 @@
 // import 'package:get/get.dart';
 // import 'package:ucs/features/student/controllers/finance_controller.dart';
 
-
 // class FinanceView extends GetView<FinanceController> {
 //   const FinanceView({super.key});
-  
+
 //   @override
 //   Widget build(BuildContext context) {
 //     final theme = Theme.of(context);

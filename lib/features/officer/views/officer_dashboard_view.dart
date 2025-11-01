@@ -21,7 +21,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
                 color: scheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha:0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -32,8 +32,10 @@ class OfficerDashboardView extends GetView<OfficerController> {
                 children: [
                   if (controller.showDetail.value)
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new,
-                          color: Colors.black),
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.black,
+                      ),
                       onPressed: controller.backToDashboard,
                     )
                   else
@@ -52,8 +54,11 @@ class OfficerDashboardView extends GetView<OfficerController> {
                       color: scheme.primary,
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    child: const Icon(Icons.person_outline,
-                        color: Colors.white, size: 18),
+                    child: const Icon(
+                      Icons.person_outline,
+                      color: Colors.white,
+                      size: 18,
+                    ),
                   ),
                 ],
               ),
@@ -82,7 +87,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
-              _tabButton("Pending", 0,scheme),
+              _tabButton("Pending", 0, scheme),
               _tabButton("Approved", 1, scheme),
               _tabButton("Rejected", 2, scheme),
             ],
@@ -124,20 +129,28 @@ class OfficerDashboardView extends GetView<OfficerController> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(s['matric'],
-                                style: AppFont.bodySmall
-                                    .copyWith(fontWeight: FontWeight.w600)),
+                            Text(
+                              s['matric'],
+                              style: AppFont.bodySmall.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                             const SizedBox(height: 4),
                             Text(s['name'], style: AppFont.bodyMedium),
                           ],
                         ),
                         if (currentTab == 0)
-                          const Icon(Icons.arrow_forward_ios,
-                              color: Colors.grey, size: 16)
+                          const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.grey,
+                            size: 16,
+                          )
                         else
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: currentTab == 1
                                   ? Colors.green.shade100
@@ -177,9 +190,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: isActive
-                    ? scheme.primary
-                    : Colors.transparent,
+                color: isActive ? scheme.primary : Colors.transparent,
                 width: 2,
               ),
             ),
@@ -188,9 +199,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
             label,
             textAlign: TextAlign.center,
             style: AppFont.bodyMedium.copyWith(
-              color: isActive
-                  ? scheme.primary
-                  : Colors.grey.shade600,
+              color: isActive ? scheme.primary : Colors.grey.shade600,
               fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
             ),
           ),
@@ -237,10 +246,13 @@ class OfficerDashboardView extends GetView<OfficerController> {
                           ),
                         ),
                         const SizedBox(height: 6),
-                        Text(doc['title']!,
-                            textAlign: TextAlign.center,
-                            style: AppFont.bodySmall.copyWith(
-                                color: scheme.primary)),
+                        Text(
+                          doc['title']!,
+                          textAlign: TextAlign.center,
+                          style: AppFont.bodySmall.copyWith(
+                            color: scheme.primary,
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -259,18 +271,20 @@ class OfficerDashboardView extends GetView<OfficerController> {
           ),
           child: Column(
             children: [
-              Obx(() => controller.showCommentBox.value
-                  ? TextField(
-                      controller: controller.commentCtrl,
-                      maxLines: 3,
-                      decoration: InputDecoration(
-                        hintText: "Enter rejection reason...",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+              Obx(
+                () => controller.showCommentBox.value
+                    ? TextField(
+                        controller: controller.commentCtrl,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                          hintText: "Enter rejection reason...",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                      ),
-                    )
-                  : const SizedBox.shrink()),
+                      )
+                    : const SizedBox.shrink(),
+              ),
               const SizedBox(height: 12),
               Row(
                 children: [
@@ -282,7 +296,8 @@ class OfficerDashboardView extends GetView<OfficerController> {
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       child: const Text("Approve"),
                     ),
@@ -296,7 +311,8 @@ class OfficerDashboardView extends GetView<OfficerController> {
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       child: const Text("Reject"),
                     ),
@@ -310,7 +326,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
     );
   }
 
-   void openDocument(Map<String, String> doc) {
+  void openDocument(Map<String, String> doc) {
     Get.dialog(
       Dialog(
         insetPadding: const EdgeInsets.all(16),
@@ -338,7 +354,7 @@ class OfficerDashboardView extends GetView<OfficerController> {
                         Expanded(
                           child: Text(
                             doc['title']!,
-                            style:  TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
                             ),

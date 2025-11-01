@@ -32,23 +32,21 @@ class ClearanceUnit {
           : null,
       requirements: reqs != null
           ? List<ClearanceRequirement>.from(
-              (reqs as List).map(
-                (r) => ClearanceRequirement.fromJson(r),
-              ),
+              (reqs as List).map((r) => ClearanceRequirement.fromJson(r)),
             )
           : [],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'unit_name': unitName,
-        'instructions': instructions,
-        'icon': icon,
-        'position': position,
-        'created_at': createdAt?.toIso8601String(),
-        // ✅ Nested serialization (for upserts if needed)
-        if (requirements.isNotEmpty)
-          'clearance_requirements': requirements.map((r) => r.toJson()).toList(),
-      };
+    'id': id,
+    'unit_name': unitName,
+    'instructions': instructions,
+    'icon': icon,
+    'position': position,
+    'created_at': createdAt?.toIso8601String(),
+    // ✅ Nested serialization (for upserts if needed)
+    if (requirements.isNotEmpty)
+      'clearance_requirements': requirements.map((r) => r.toJson()).toList(),
+  };
 }

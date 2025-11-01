@@ -29,8 +29,7 @@ class UserDeviceRepository {
 
   Future<List<UserDevice>> getDevicesByUser(String userId) async {
     try {
-      final result =
-          await _client.from(_table).select().eq('user_id', userId);
+      final result = await _client.from(_table).select().eq('user_id', userId);
       return (result as List).map((e) => UserDevice.fromJson(e)).toList();
     } on PostgrestException catch (e) {
       throw Exception('Failed to fetch devices: ${e.message}');

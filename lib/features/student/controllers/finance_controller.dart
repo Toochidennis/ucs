@@ -24,17 +24,26 @@ class FinanceController extends GetxController {
 
   void submit() {
     if (uploadedFiles.length < 4) {
-      Get.snackbar('Incomplete', 'Please upload all required documents before submitting.',
-          snackPosition: SnackPosition.TOP);
+      Get.snackbar(
+        'Incomplete',
+        'Please upload all required documents before submitting.',
+        snackPosition: SnackPosition.TOP,
+      );
     } else {
       status.value = "submitted";
-      Get.snackbar('Success', 'Documents submitted successfully!',
-          snackPosition: SnackPosition.TOP);
+      Get.snackbar(
+        'Success',
+        'Documents submitted successfully!',
+        snackPosition: SnackPosition.TOP,
+      );
     }
   }
 
   void saveDraft() {
-    Get.snackbar('Saved', 'Draft saved successfully!',
-        snackPosition: SnackPosition.TOP);
+    Get.snackbar(
+      'Saved',
+      'Draft saved successfully!',
+      snackPosition: SnackPosition.TOP,
+    );
   }
 }

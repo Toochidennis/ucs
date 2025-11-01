@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ucs/core/routes/app_routes.dart';
 import 'package:ucs/data/models/login.dart';
 import 'package:ucs/data/services/student_home_service.dart';
 
@@ -113,11 +114,9 @@ class ClearanceProcessController extends GetxController {
       return;
     }
 
-    // TODO: Navigate to unit detail view
-    Get.snackbar(
-      'Opening Unit',
-      'Opening ${unit['unitName']}',
-      snackPosition: SnackPosition.BOTTOM,
+    Get.toNamed(
+      AppRoutes.clearanceDetails,
+      arguments: {'unitId': unit['unitId'] as String},
     );
   }
 

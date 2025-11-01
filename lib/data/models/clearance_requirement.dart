@@ -31,12 +31,12 @@ class ClearanceRequirement {
       );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'unit_id': unitId,
-        'title': title,
-        'description': description,
-        'is_mandatory': isMandatory,
-        'position': position,
-        'created_at': createdAt?.toIso8601String(),
-      };
+    'id': id,
+    'unit_id': unitId,
+    'title': title,
+    'description': description,
+    'is_mandatory': isMandatory,
+    'position': position,
+    'created_at': createdAt?.toIso8601String(),
+  };
 }

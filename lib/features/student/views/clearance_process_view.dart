@@ -156,7 +156,7 @@ class ClearanceProcessView extends GetView<ClearanceProcessController> {
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(
                 color: isAccessible
-                    ? color.withOpacity(0.3)
+                    ? color.withValues(alpha: 0.3)
                     : scheme.outlineVariant,
                 width: 1.5,
               ),
@@ -174,7 +174,7 @@ class ClearanceProcessView extends GetView<ClearanceProcessController> {
                       height: 56,
                       decoration: BoxDecoration(
                         color: isAccessible
-                            ? color.withOpacity(0.15)
+                            ? color.withValues(alpha: 0.15)
                             : scheme.surfaceContainerHighest,
                         shape: BoxShape.circle,
                       ),
@@ -277,7 +277,7 @@ class ClearanceProcessView extends GetView<ClearanceProcessController> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [color.withOpacity(0.5), scheme.outlineVariant],
+                colors: [color.withValues(alpha: 0.5), scheme.outlineVariant],
               ),
             ),
           ),
@@ -312,7 +312,7 @@ class ClearanceProcessView extends GetView<ClearanceProcessController> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.green.withOpacity(0.3),
+                      color: Colors.green.withValues(alpha: 0.3),
                       blurRadius: 12,
                       spreadRadius: 2,
                     ),

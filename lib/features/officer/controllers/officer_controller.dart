@@ -112,5 +112,4 @@ class OfficerController extends GetxController {
     );
     backToDashboard();
   }
-
 }

@@ -357,7 +357,7 @@ class AdminSettingsController extends GetxController {
   }
 
   void logout() {
-    if(Get.isRegistered<AuthController>()){
+    if (Get.isRegistered<AuthController>()) {
       final auth = Get.find<AuthController>();
       auth.logout();
     }

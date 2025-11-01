@@ -25,7 +25,10 @@ class NotificationsView extends GetView<NotificationsController> {
                 Text("Notifications", style: theme.textTheme.titleSmall),
                 TextButton(
                   onPressed: controller.markAllRead,
-                  child: Text("Mark all read", style: theme.textTheme.titleMedium),
+                  child: Text(
+                    "Mark all read",
+                    style: theme.textTheme.titleMedium,
+                  ),
                 ),
               ],
             ),
