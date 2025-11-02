@@ -15,55 +15,6 @@ class OfficerHomeView extends GetView<OfficerHomeController> {
       body: Obx(() {
         return Column(
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: scheme.surface,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (controller.showDetail.value)
-                    IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Colors.black,
-                      ),
-                      onPressed: controller.backToDashboard,
-                    )
-                  else
-                    const SizedBox(width: 48),
-                  Text(
-                    controller.headerTitle.value,
-                    style: AppFont.titleSmall.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: scheme.onSurface,
-                    ),
-                  ),
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: scheme.primary,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: const Icon(
-                      Icons.person_outline,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),

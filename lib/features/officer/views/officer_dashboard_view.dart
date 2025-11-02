@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ucs/features/officer/controllers/officer_dashboard_controller.dart';
 import 'package:ucs/features/officer/views/officer_home_view.dart';
+import 'package:ucs/features/officer/views/officer_notifications_view.dart';
 import 'package:ucs/features/officer/views/officer_profile_view.dart';
-import 'package:ucs/shared/views/notifications_view.dart';
 
 class OfficerDashboardView extends GetView<OfficerDashboardController> {
   const OfficerDashboardView({super.key});
@@ -28,7 +28,7 @@ class OfficerDashboardView extends GetView<OfficerDashboardController> {
               index: controller.currentTab.value,
               children: const [
                 OfficerHomeView(),
-                NotificationsView(),
+                OfficerNotificationsView(),
                 OfficerProfileView(),
               ],
             ),

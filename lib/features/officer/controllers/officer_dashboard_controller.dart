@@ -41,12 +41,11 @@ class OfficerDashboardController extends GetxController {
         appBarTitle.value = 'Dashboard';
         appBarActions.value = [];
         break;
-      case 2:
+      case 1:
         appBarTitle.value = 'Notifications';
         appBarActions.value = [];
         break;
-
-      case 3:
+      case 2:
         appBarTitle.value = 'Profile';
         appBarActions.value = [];
         break;
